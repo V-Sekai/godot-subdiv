@@ -61,13 +61,13 @@ struct VertexWeights {
 		}
 	}
 
-	void AddWithWeight(VertexWeights const &src, real_t weight) {
+	void AddWithWeight(VertexWeights const &src, float weight) {
 		for (int i = 0; i < weights.size(); i++) {
 			weights.write[i] += src.weights[i] * weight;
 		}
 	}
 
-	Vector<real_t> weights;
+	PackedFloat32Array weights;
 };
 
 Descriptor Subdivider::_create_topology_descriptor(Vector<int> &subdiv_face_vertex_count, Descriptor::FVarChannel *channels, const int32_t p_format) {
@@ -169,7 +169,7 @@ void Subdivider::_create_subdivision_vertices(Far::TopologyRefiner *refiner, con
 		}
 
 		//create array with all weights per vertex
-		Vector<Vector<real_t>> all_vertex_bone_weights; //will contain all weights per vertex indexed to bones
+		Vector<PackedFloat32Array> all_vertex_bone_weights; //will contain all weights per vertex indexed to bones
 		all_vertex_bone_weights.resize(topology_data.vertex_count);
 
 		//resize to fit all weights
@@ -200,7 +200,7 @@ void Subdivider::_create_subdivision_vertices(Far::TopologyRefiner *refiner, con
 		topology_data.weights_array.resize(topology_data.vertex_count * 4);
 		for (int vertex_index = 0; vertex_index < topology_data.vertex_count; vertex_index++) {
 			int weight_indices[4] = { -1, -1, -1, -1 };
-			const Vector<real_t> &vertex_bones_weights = all_vertex_bone_weights[vertex_index];
+			const PackedFloat32Array &vertex_bones_weights = all_vertex_bone_weights[vertex_index];
 
 			for (int weight_index = 0; weight_index <= highest_bone_index; weight_index++) {
 				if (vertex_bones_weights[weight_index] != 0 && (weight_indices[3] == -1 || vertex_bones_weights[weight_index] > vertex_bones_weights[weight_indices[3]])) {
