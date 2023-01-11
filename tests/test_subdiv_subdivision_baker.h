@@ -1,12 +1,14 @@
-#include "doctest.h"
+#pragma once
 
-#include "godot_cpp/classes/resource_loader.hpp"
-#include "subdivision/subdivision_baker.hpp"
+#include "core/io/resource_loader.h"
+#include "modules/subdiv/src/subdivision/subdivision_baker.hpp"
+#include "tests/test_macros.h"
 
 //just checks for non empty usable data
 TEST_CASE("Simple bake") {
-	Ref<SubdivisionBaker> baker = memnew(SubdivisionBaker);
-	Ref<TopologyDataMesh> source_mesh = ResourceLoader::get_singleton()->load("res://test/skinning_test.tres");
+	Ref<SubdivisionBaker> baker;
+	baker.instantiate();
+	Ref<TopologyDataMesh> source_mesh = core_bind::ResourceLoader::get_singleton()->load("res://test/skinning_test.tres");
 	Ref<ImporterMesh> importer_mesh;
 	importer_mesh.instantiate();
 	importer_mesh = baker->get_importer_mesh(importer_mesh, source_mesh, 2);

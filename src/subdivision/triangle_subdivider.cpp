@@ -1,6 +1,6 @@
 #include "triangle_subdivider.hpp"
-#include "godot_cpp/classes/mesh.hpp"
-#include "godot_cpp/classes/surface_tool.hpp"
+#include "scene/resources/mesh.h"
+#include "scene/resources/surface_tool.h"
 
 using namespace OpenSubdiv;
 
@@ -9,7 +9,8 @@ OpenSubdiv::Sdc::SchemeType TriangleSubdivider::_get_refiner_type() const {
 }
 
 Array TriangleSubdivider::_get_triangle_arrays() const {
-	Ref<SurfaceTool> st = memnew(SurfaceTool);
+	Ref<SurfaceTool> st;
+	st.instantiate();
 
 	bool use_uv = topology_data.uv_array.size();
 	bool use_bones = topology_data.weights_array.size();

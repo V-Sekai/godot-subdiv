@@ -1,11 +1,10 @@
 #include "subdivider.hpp"
 
-#include "godot_cpp/classes/mesh_data_tool.hpp"
-#include "godot_cpp/classes/rendering_server.hpp"
-#include "godot_cpp/templates/hash_set.hpp"
-#include "godot_cpp/variant/builtin_types.hpp"
-#include "godot_cpp/variant/utility_functions.hpp"
-#include "resources/topology_data_mesh.hpp"
+#include "scene/resources/mesh_data_tool.h"
+#include "servers/rendering_server.h"
+#include "core/templates/hash_set.h"
+
+#include "modules/subdiv/src/resources/topology_data_mesh.hpp"
 
 //debug
 // #include <chrono>
@@ -62,13 +61,13 @@ struct VertexUV {
 struct VertexWeights {
 	void Clear() {
 		for (int i = 0; i < weights.size(); i++) {
-			weights[i] = 0;
+			weights.write[i] = 0;
 		}
 	}
 
 	void AddWithWeight(VertexWeights const &src, float weight) {
 		for (int i = 0; i < weights.size(); i++) {
-			weights[i] += src.weights[i] * weight;
+			weights.write[i] += src.weights[i] * weight;
 		}
 	}
 
@@ -187,7 +186,7 @@ void Subdivider::_create_subdivision_vertices(Far::TopologyRefiner *refiner, con
 			for (int weight_index = 0; weight_index < 4; weight_index++) {
 				if (topology_data.weights_array[vertex_index * 4 + weight_index] != 0.0f) {
 					int bone_index = topology_data.bones_array[vertex_index * 4 + weight_index];
-					all_vertex_bone_weights.write[vertex_index][bone_index] = topology_data.weights_array[vertex_index * 4 + weight_index];
+					all_vertex_bone_weights.write[vertex_index].write[bone_index] = topology_data.weights_array[vertex_index * 4 + weight_index];
 				}
 			}
 		}
@@ -226,11 +225,11 @@ void Subdivider::_create_subdivision_vertices(Far::TopologyRefiner *refiner, con
 			//save data in bones and weights array
 			for (int result_weight_index = 0; result_weight_index < 4; result_weight_index++) {
 				if (weight_indices[result_weight_index] == -1) { //happens if not 4 bones
-					topology_data.bones_array[vertex_index * 4 + result_weight_index] = 0;
-					topology_data.weights_array[vertex_index * 4 + result_weight_index] = 0;
+					topology_data.bones_array.write[vertex_index * 4 + result_weight_index] = 0;
+					topology_data.weights_array.write[vertex_index * 4 + result_weight_index] = 0;
 				} else {
-					topology_data.bones_array[vertex_index * 4 + result_weight_index] = weight_indices[result_weight_index];
-					topology_data.weights_array[vertex_index * 4 + result_weight_index] = vertex_bones_weights[weight_indices[result_weight_index]];
+					topology_data.bones_array.write[vertex_index * 4 + result_weight_index] = weight_indices[result_weight_index];
+					topology_data.weights_array.write[vertex_index * 4 + result_weight_index] = vertex_bones_weights[weight_indices[result_weight_index]];
 				}
 			}
 		}
@@ -336,12 +335,12 @@ PackedVector3Array Subdivider::_calculate_smooth_normals(const PackedVector3Arra
 		normal_calculated.normalize();
 		for (int n_pos = f; n_pos < f + topology_data.vertex_count_per_face; n_pos++) {
 			int vertexIndex = quad_index_array[n_pos];
-			normals[vertexIndex] += normal_calculated;
+			normals.write[vertexIndex] += normal_calculated;
 		}
 	}
 	//normalized accumulated normals
 	for (int vertex_index = 0; vertex_index < normals.size(); ++vertex_index) {
-		normals[vertex_index].normalize();
+		normals.write[vertex_index].normalize();
 	}
 	return normals;
 }

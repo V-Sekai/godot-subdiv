@@ -1,15 +1,10 @@
 #ifndef SUBDIVIDER_H
 #define SUBDIVIDER_H
 
-#include "godot_cpp/classes/global_constants.hpp"
-#include "godot_cpp/classes/ref_counted.hpp"
-#include "godot_cpp/core/binder_common.hpp"
-#include "godot_cpp/templates/vector.hpp"
+#include "core/object/ref_counted.h"
 
-#include "far/primvarRefiner.h"
-#include "far/topologyDescriptor.h"
-
-using namespace godot;
+#include "modules/subdiv/thirdparty/opensubdiv/far/primvarRefiner.h"
+#include "modules/subdiv/thirdparty/opensubdiv/far/topologyDescriptor.h"
 
 class Subdivider : public RefCounted {
 	GDCLASS(Subdivider, RefCounted);

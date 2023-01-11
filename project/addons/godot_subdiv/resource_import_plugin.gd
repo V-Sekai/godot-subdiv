@@ -54,7 +54,7 @@ func _get_import_options(path, preset_index):
 func _import(source_file, save_path, options, platform_variants, gen_files):
 	var gltf := GLTFDocument.new()
 	var gltf_state := GLTFState.new()
-	gltf.append_from_file(source_file, gltf_state, 0, 0)
+	gltf.append_from_file(source_file, gltf_state, 0)
 	var node=gltf.generate_scene(gltf_state)
 	#set root name, otherwise throws name is empty
 	node.name=source_file.get_file().get_basename()

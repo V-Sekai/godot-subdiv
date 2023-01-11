@@ -1,13 +1,7 @@
-#include "test_utility_methods.hpp"
+#ifndef TEST_UTILITY_METHODS_H
+#define TEST_UTILITY_METHODS_H
 
-bool contains_null(PackedVector3Array arr) {
-	for (int i = 0; i < arr.size(); i++) {
-		if (&arr[i] == nullptr) {
-			return true;
-		}
-	}
-	return false;
-}
+#include "core/variant/typed_array.h"
 
 bool contains_default(PackedVector3Array arr) {
 	for (int i = 0; i < arr.size(); i++) {
@@ -38,3 +32,5 @@ PackedInt32Array create_packed_int32_array(int32_t arr[], int size) {
 	}
 	return packed_array;
 }
+
+#endif

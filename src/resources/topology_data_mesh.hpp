@@ -1,16 +1,10 @@
 #ifndef TOPOLOGY_DATA_MESH_H
 #define TOPOLOGY_DATA_MESH_H
 
-#include "godot_cpp/classes/global_constants.hpp"
-#include "godot_cpp/core/binder_common.hpp"
-
-#include "godot_cpp/classes/array_mesh.hpp"
-#include "godot_cpp/classes/material.hpp"
-#include "godot_cpp/classes/mesh.hpp"
-#include "godot_cpp/classes/resource.hpp"
-#include "godot_cpp/templates/vector.hpp"
-
-using namespace godot;
+#include "scene/resources/mesh.h"
+#include "scene/resources/material.h"
+#include "scene/resources/mesh.h"
+#include "core/io/resource.h"
 
 class TopologyDataMesh : public Resource {
 	GDCLASS(TopologyDataMesh, Resource);
@@ -60,13 +54,13 @@ protected:
 
 public:
 	struct TopologySurfaceData {
-		godot::PackedVector3Array vertex_array;
-		godot::PackedVector3Array normal_array;
-		godot::PackedVector2Array uv_array;
-		godot::PackedInt32Array uv_index_array;
-		godot::PackedInt32Array index_array;
-		godot::PackedFloat32Array bones_array;
-		godot::PackedFloat32Array weights_array;
+		PackedVector3Array vertex_array;
+		PackedVector3Array normal_array;
+		PackedVector2Array uv_array;
+		PackedInt32Array uv_index_array;
+		PackedInt32Array index_array;
+		PackedFloat32Array bones_array;
+		PackedFloat32Array weights_array;
 		TopologySurfaceData(Array p_mesh_arrays) {
 			vertex_array = p_mesh_arrays[TopologyDataMesh::ARRAY_VERTEX];
 			normal_array = p_mesh_arrays[TopologyDataMesh::ARRAY_NORMAL];
@@ -110,5 +104,5 @@ public:
 	~TopologyDataMesh();
 };
 
-VARIANT_ENUM_CAST(TopologyDataMesh, TopologyType);
+VARIANT_ENUM_CAST(TopologyDataMesh::TopologyType);
 #endif

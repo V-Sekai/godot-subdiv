@@ -1,9 +1,11 @@
-#include "doctest.h"
-#include "godot_cpp/classes/resource_loader.hpp"
-#include "godot_cpp/variant/utility_functions.hpp"
-#include "resources/topology_data_mesh.hpp"
-#include "subdivision/triangle_subdivider.hpp"
-#include "test_utility_methods.hpp"
+#pragma once
+
+#include "tests/test_macros.h"
+
+#include "core/io/resource_loader.h"
+#include "modules/subdiv/src/resources/topology_data_mesh.hpp"
+#include "modules/subdiv/src/subdivision/triangle_subdivider.hpp"
+#include "subdiv_utility_methods.h"
 
 //I don't think a lot of unit tests are needed for this. If it outputs non empty data subdivision very likely worked since opensubdiv let the data through
 TEST_CASE("subdivide once") {
@@ -22,7 +24,8 @@ TEST_CASE("subdivide once") {
 
 	int32_t p_format = Mesh::ARRAY_FORMAT_VERTEX;
 	p_format &= Mesh::ARRAY_FORMAT_INDEX;
-	Ref<TriangleSubdivider> subdivider = memnew(TriangleSubdivider);
+	Ref<TriangleSubdivider> subdivider;
+	subdivider.instantiate();
 	Array result = subdivider->get_subdivided_arrays(arr, 1, p_format, false);
 	CHECK(result.size() == Mesh::ARRAY_MAX);
 	const PackedVector3Array &result_vertex_array = result[Mesh::ARRAY_VERTEX];

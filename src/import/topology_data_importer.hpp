@@ -1,14 +1,11 @@
 #ifndef TOPOLOGY_DATA_IMPORTER_H
 #define TOPOLOGY_DATA_IMPORTER_H
 
-#include "godot_cpp/classes/global_constants.hpp"
-#include "godot_cpp/classes/mesh.hpp"
-#include "godot_cpp/templates/hash_map.hpp"
-#include "godot_cpp/templates/vector.hpp"
+#include "scene/resources/mesh.h"
+#include "core/object/object.h"
+#include "core/templates/hash_map.h"
 
-#include "resources/topology_data_mesh.hpp"
-
-using namespace godot;
+#include "modules/subdiv/src/resources/topology_data_mesh.hpp"
 
 class TopologyDataImporter : public Object {
 	GDCLASS(TopologyDataImporter, Object);
@@ -27,12 +24,12 @@ public:
 
 private:
 	struct TopologySurfaceData {
-		godot::PackedVector3Array vertex_array;
-		godot::PackedVector3Array normal_array;
-		godot::PackedVector2Array uv_array;
-		godot::PackedInt32Array index_array;
-		godot::PackedInt32Array bones_array;
-		godot::PackedFloat32Array weights_array;
+		PackedVector3Array vertex_array;
+		PackedVector3Array normal_array;
+		PackedVector2Array uv_array;
+		PackedInt32Array index_array;
+		PackedInt32Array bones_array;
+		PackedFloat32Array weights_array;
 	};
 
 	struct SurfaceVertexArrays { //of imported triangle mesh
@@ -63,6 +60,6 @@ public:
 	void convert_importer_meshinstance_to_subdiv(Object *p_meshinstance, ImportMode import_mode, int32_t subdiv_level);
 };
 
-VARIANT_ENUM_CAST(TopologyDataImporter, ImportMode);
+VARIANT_ENUM_CAST(TopologyDataImporter::ImportMode);
 
 #endif

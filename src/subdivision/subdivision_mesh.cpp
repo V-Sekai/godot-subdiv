@@ -1,16 +1,12 @@
 #include "subdivision_mesh.hpp"
 
-#include "godot_cpp/classes/mesh_instance3d.hpp"
-#include "godot_cpp/core/class_db.hpp"
+#include "scene/3d/mesh_instance_3d.h"
+#include "core/object/class_db.h"
 
-#include "godot_cpp/classes/global_constants.hpp"
-#include "godot_cpp/classes/surface_tool.hpp"
-#include "godot_cpp/variant/utility_functions.hpp"
+#include "scene/resources/surface_tool.h"
 
-#include "godot_cpp/classes/mesh_data_tool.hpp"
-#include "godot_cpp/classes/rendering_server.hpp"
-#include "godot_cpp/templates/vector.hpp"
-#include "godot_cpp/variant/builtin_types.hpp"
+#include "scene/resources/mesh_data_tool.h"
+#include "servers/rendering_server.h"
 
 #include "quad_subdivider.hpp"
 #include "triangle_subdivider.hpp"
@@ -18,12 +14,14 @@
 Array SubdivisionMesh::_get_subdivided_arrays(const Array &p_arrays, int p_level, int32_t p_format, bool calculate_normals, TopologyDataMesh::TopologyType topology_type) {
 	switch (topology_type) {
 		case TopologyDataMesh::QUAD: {
-			Ref<QuadSubdivider> subdivider = memnew(QuadSubdivider);
+			Ref<QuadSubdivider> subdivider;
+			subdivider.instantiate();
 			return subdivider->get_subdivided_arrays(p_arrays, p_level, p_format, calculate_normals);
 		}
 
 		case TopologyDataMesh::TRIANGLE: {
-			Ref<TriangleSubdivider> subdivider = memnew(TriangleSubdivider);
+			Ref<TriangleSubdivider> subdivider;
+			subdivider.instantiate();
 			return subdivider->get_subdivided_arrays(p_arrays, p_level, p_format, calculate_normals);
 		}
 
@@ -88,7 +86,8 @@ void SubdivisionMesh::update_subdivision_vertices(int p_surface, const PackedVec
 
 	// update vertices
 	//Vector<uint8_t> vertex_data; // Vertex, Normal, Tangent (change with skinning, blendshape).
-	PackedByteArray vertex_buffer = RenderingServer::get_singleton()->mesh_get_surface(subdiv_mesh, p_surface)["vertex_data"];
+	RenderingServer::SurfaceData sd = RenderingServer::get_singleton()->mesh_get_surface(subdiv_mesh, p_surface);
+	PackedByteArray vertex_buffer = sd.vertex_data;
 	uint8_t *vertex_write_buffer = vertex_buffer.ptrw();
 
 	uint32_t vertex_stride = sizeof(float) * 3; //vector3 size
@@ -135,7 +134,7 @@ RID SubdivisionMesh::get_rid() const {
 
 void SubdivisionMesh::set_rid(RID p_rid) {
 	if (subdiv_mesh.is_valid()) {
-		RenderingServer::get_singleton()->free_rid(subdiv_mesh);
+		RenderingServer::get_singleton()->free(subdiv_mesh);
 	}
 	subdiv_mesh = p_rid;
 }
@@ -152,7 +151,7 @@ SubdivisionMesh::SubdivisionMesh() {
 
 SubdivisionMesh::~SubdivisionMesh() {
 	if (subdiv_mesh.is_valid()) {
-		RenderingServer::get_singleton()->free_rid(subdiv_mesh);
+		RenderingServer::get_singleton()->free(subdiv_mesh);
 	}
 
 	subdiv_mesh = RID();

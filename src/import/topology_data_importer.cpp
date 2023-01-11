@@ -1,19 +1,19 @@
 #include "topology_data_importer.hpp"
 
-#include "godot_cpp/templates/hash_map.hpp"
-#include "godot_cpp/templates/hash_set.hpp"
+#include "core/templates/hash_map.h"
+#include "core/templates/hash_set.h"
 
-#include "godot_cpp/classes/array_mesh.hpp"
-#include "godot_cpp/classes/importer_mesh.hpp"
-#include "godot_cpp/classes/importer_mesh_instance3d.hpp"
-#include "godot_cpp/classes/mesh_instance3d.hpp"
-#include "godot_cpp/classes/scene_tree.hpp"
-#include "godot_cpp/classes/skeleton3d.hpp"
-#include "godot_cpp/variant/utility_functions.hpp"
+#include "scene/resources/mesh.h"
+#include "scene/resources/importer_mesh.h"
+#include "scene/resources/importer_mesh.h"
+#include "scene/3d/importer_mesh_instance_3d.h"
+#include "scene/3d/mesh_instance_3d.h"
+#include "scene/main/scene_tree.h"
+#include "scene/3d/skeleton_3d.h"
 
-#include "nodes/subdiv_mesh_instance_3d.hpp"
-#include "resources/baked_subdiv_mesh.hpp"
-#include "subdivision/subdivision_baker.hpp"
+#include "modules/subdiv/src/nodes/subdiv_mesh_instance_3d.hpp"
+#include "modules/subdiv/src/resources/baked_subdiv_mesh.hpp"
+#include "modules/subdiv/src/subdivision/subdivision_baker.hpp"
 
 TopologyDataImporter::TopologyDataImporter() {
 }
@@ -22,7 +22,7 @@ TopologyDataImporter::~TopologyDataImporter() {
 }
 
 void TopologyDataImporter::_bind_methods() {
-	ClassDB::bind_method(D_METHOD("convert_importer_meshinstance_to_subdiv"), &TopologyDataImporter::convert_importer_meshinstance_to_subdiv);
+	ClassDB::bind_method(D_METHOD("convert_importer_meshinstance_to_subdiv", "object", "mode", "level"), &TopologyDataImporter::convert_importer_meshinstance_to_subdiv);
 	BIND_ENUM_CONSTANT(SUBDIV_MESHINSTANCE);
 	BIND_ENUM_CONSTANT(BAKED_SUBDIV_MESH);
 	BIND_ENUM_CONSTANT(ARRAY_MESH);
@@ -33,20 +33,11 @@ TopologyDataImporter::SurfaceVertexArrays::SurfaceVertexArrays(const Array &p_me
 	ERR_FAIL_COND(p_mesh_arrays.size() != Mesh::ARRAY_MAX);
 
 	vertex_array = p_mesh_arrays[Mesh::ARRAY_VERTEX];
-	if (p_mesh_arrays[Mesh::ARRAY_NORMAL].get_type() == Variant::PACKED_VECTOR3_ARRAY)
-		normal_array = p_mesh_arrays[Mesh::ARRAY_NORMAL];
-
-	if (p_mesh_arrays[Mesh::ARRAY_INDEX].get_type() == Variant::PACKED_INT32_ARRAY)
-		index_array = p_mesh_arrays[Mesh::ARRAY_INDEX];
-
-	if (p_mesh_arrays[Mesh::ARRAY_TEX_UV].get_type() == Variant::PACKED_VECTOR2_ARRAY)
-		uv_array = p_mesh_arrays[Mesh::ARRAY_TEX_UV];
-
-	if (p_mesh_arrays[Mesh::ARRAY_BONES].get_type() == Variant::PACKED_INT32_ARRAY)
-		bones_array = p_mesh_arrays[Mesh::ARRAY_BONES];
-
-	if (p_mesh_arrays[Mesh::ARRAY_WEIGHTS].get_type() == Variant::PACKED_FLOAT32_ARRAY)
-		weights_array = p_mesh_arrays[Mesh::ARRAY_WEIGHTS];
+	normal_array = p_mesh_arrays[Mesh::ARRAY_NORMAL];
+	index_array = p_mesh_arrays[Mesh::ARRAY_INDEX];
+	uv_array = p_mesh_arrays[Mesh::ARRAY_TEX_UV];
+	bones_array = p_mesh_arrays[Mesh::ARRAY_BONES];
+	weights_array = p_mesh_arrays[Mesh::ARRAY_WEIGHTS];
 }
 
 void TopologyDataImporter::convert_importer_meshinstance_to_subdiv(Object *importer_mesh_instance_object, ImportMode import_mode, int32_t subdiv_level) {
@@ -72,7 +63,7 @@ void TopologyDataImporter::convert_importer_meshinstance_to_subdiv(Object *impor
 	for (int surface_index = 0; surface_index < importer_mesh->get_surface_count(); surface_index++) {
 		//convert actual mesh data to quad
 		Array p_arrays = importer_mesh->get_surface_arrays(surface_index);
-		int32_t format = generate_fake_format(p_arrays); //importermesh surface_get_format just returns flags
+		int32_t format = generate_fake_format(p_arrays);
 
 		// generate_fake_format returns 0 if size != ARRAY_MAX
 		if (format == 0 || !(format & Mesh::ARRAY_FORMAT_VERTEX)) {
@@ -105,7 +96,7 @@ void TopologyDataImporter::convert_importer_meshinstance_to_subdiv(Object *impor
 		topology_data_mesh->add_surface(surface_arrays, topology_data_blend_shape_arrays,
 				importer_mesh->get_surface_material(surface_index), importer_mesh->get_surface_name(surface_index), format, topology_type);
 	}
-	//actually add blendshapes to data
+	//add blendshapes to data
 	for (int blend_shape_idx = 0; blend_shape_idx < importer_mesh->get_blend_shape_count(); blend_shape_idx++) {
 		topology_data_mesh->add_blend_shape_name(importer_mesh->get_blend_shape_name(blend_shape_idx));
 	}
@@ -148,12 +139,10 @@ void TopologyDataImporter::convert_importer_meshinstance_to_subdiv(Object *impor
 			Ref<ImporterMesh> subdiv_importer_mesh;
 			subdiv_importer_mesh.instantiate();
 
-			Ref<SubdivisionBaker> baker = memnew(SubdivisionBaker);
+			Ref<SubdivisionBaker> baker;
+			baker.instantiate();
 			subdiv_importer_mesh = baker->get_importer_mesh(subdiv_importer_mesh, topology_data_mesh, subdiv_level, true);
 			importer_mesh_instance->set_mesh(subdiv_importer_mesh);
-			if (import_mode == ImportMode::ARRAY_MESH) {
-				MeshInstance3D *mesh_instance = Object::cast_to<MeshInstance3D>(_replace_importer_mesh_instance_with_mesh_instance(importer_mesh_instance));
-			}
 			break;
 		}
 		default:
@@ -228,7 +217,7 @@ TopologyDataImporter::TopologySurfaceData TopologyDataImporter::_remove_duplicat
 			max_index++;
 		}
 
-		// always if uv's exist
+		// always use uvs if they exist
 		if (has_uv) {
 			topology_surface.uv_array.append(surface.uv_array[index]);
 		}

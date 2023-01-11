@@ -1,16 +1,10 @@
 #ifndef BAKED_SUBDIV_MESH_H
 #define BAKED_SUBDIV_MESH_H
 
-#include "godot_cpp/classes/global_constants.hpp"
-#include "godot_cpp/core/binder_common.hpp"
-
-#include "godot_cpp/classes/array_mesh.hpp"
-#include "godot_cpp/classes/material.hpp"
-#include "godot_cpp/classes/mesh.hpp"
-#include "godot_cpp/classes/resource.hpp"
-#include "godot_cpp/templates/vector.hpp"
-
-using namespace godot;
+#include "core/io/resource.h"
+#include "core/object/class_db.h"
+#include "scene/resources/material.h"
+#include "scene/resources/mesh.h"
 
 class TopologyDataMesh;
 
@@ -25,7 +19,7 @@ protected:
 	void _clear();
 
 	bool _set(const StringName &p_name, const Variant &p_value);
-	bool _get(const StringName &p_name, Variant &r_ret);
+	bool _get(const StringName &p_name, Variant &r_ret) const;
 
 	static void _bind_methods();
 

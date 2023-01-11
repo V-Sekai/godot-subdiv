@@ -1,17 +1,20 @@
-#include "doctest.h"
-#include "godot_cpp/classes/resource_loader.hpp"
-#include "godot_cpp/variant/utility_functions.hpp"
-#include "resources/topology_data_mesh.hpp"
-#include "subdivision/quad_subdivider.hpp"
-#include "test_utility_methods.hpp"
+#pragma once
 
-//just checks that quad_subdivider outputs usable data
+#include "tests/test_macros.h"
+
+#include "core/io/resource_loader.h"
+
+#include "modules/subdiv/src/resources/topology_data_mesh.hpp"
+#include "modules/subdiv/src/subdivision/quad_subdivider.hpp"
+
+#include "subdiv_utility_methods.h"
+
+//checks that quad_subdivider outputs usable data
 TEST_CASE("simple cube test") {
-	Ref<TopologyDataMesh> a = ResourceLoader::get_singleton()->load("res://test/cube.tres");
+	Ref<TopologyDataMesh> a = core_bind::ResourceLoader::get_singleton()->load("res://test/cube.tres");
 	const Array arr = a->surface_get_arrays(0);
-	int32_t surface_format = Mesh::ARRAY_FORMAT_VERTEX;
-	surface_format &= Mesh::ARRAY_FORMAT_INDEX;
-	Ref<QuadSubdivider> quad_subdivider = memnew(QuadSubdivider);
+	Ref<QuadSubdivider> quad_subdivider;
+	quad_subdivider.instantiate();
 	Array result = quad_subdivider->get_subdivided_arrays(arr, 1, a->surface_get_format(0), true);
 	const PackedVector3Array &vertex_array = result[Mesh::ARRAY_VERTEX];
 	const PackedVector3Array &normal_array = result[Mesh::ARRAY_NORMAL];
@@ -19,17 +22,15 @@ TEST_CASE("simple cube test") {
 	CHECK(vertex_array.size() != 0);
 	CHECK(index_array.size() % 3 == 0);
 	CHECK(normal_array.size() == vertex_array.size());
-	CHECK(!contains_null(normal_array));
 	CHECK(!contains_default(normal_array)); //normal of 0,0,0 shouldn't happen
 }
 
 //TODO: after implementing subdivision baker compare with that here
 TEST_CASE("compare with subdivided") {
-	Ref<TopologyDataMesh> a = ResourceLoader::get_singleton()->load("res://test/cube.tres");
+	Ref<TopologyDataMesh> a = core_bind::ResourceLoader::get_singleton()->load("res://test/cube.tres");
 	const Array arr = a->surface_get_arrays(0);
-	int32_t surface_format = Mesh::ARRAY_FORMAT_VERTEX;
-	surface_format &= Mesh::ARRAY_FORMAT_INDEX;
-	Ref<QuadSubdivider> quad_subdivider = memnew(QuadSubdivider);
+	Ref<QuadSubdivider> quad_subdivider;
+	quad_subdivider.instantiate();
 	Array result = quad_subdivider->get_subdivided_topology_arrays(arr, 1, a->surface_get_format(0), true);
 	const PackedVector3Array &vertex_array = result[TopologyDataMesh::ARRAY_VERTEX];
 	const PackedVector3Array &normal_array = result[TopologyDataMesh::ARRAY_NORMAL];
@@ -37,7 +38,7 @@ TEST_CASE("compare with subdivided") {
 	CHECK(vertex_array.size() != 0);
 	CHECK(index_array.size() % 3 == 0);
 	CHECK(normal_array.size() == vertex_array.size());
-	Ref<TopologyDataMesh> expected = ResourceLoader::get_singleton()->load("res://test/cube_subdiv_1.tres");
+	Ref<TopologyDataMesh> expected = core_bind::ResourceLoader::get_singleton()->load("res://test/cube_subdiv_1.tres");
 	Array expected_arr = expected->surface_get_arrays(0);
 	const PackedVector3Array &expected_vertex_array = expected_arr[TopologyDataMesh::ARRAY_VERTEX];
 	const PackedInt32Array &expected_index_array = expected_arr[TopologyDataMesh::ARRAY_INDEX];
@@ -62,7 +63,8 @@ TEST_CASE("subdiv level zero") {
 
 	int32_t p_format = Mesh::ARRAY_FORMAT_VERTEX;
 	p_format &= Mesh::ARRAY_FORMAT_INDEX;
-	Ref<QuadSubdivider> subdivider = memnew(QuadSubdivider);
+	Ref<QuadSubdivider> subdivider;
+	subdivider.instantiate();
 	Array result = subdivider->get_subdivided_arrays(arr, 0, p_format, false);
 	CHECK(result.size() == Mesh::ARRAY_MAX); //TODO: make a test suite that calls all these for each input
 	const PackedVector3Array &result_vertex_array = result[Mesh::ARRAY_VERTEX];

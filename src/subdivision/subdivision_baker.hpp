@@ -1,13 +1,11 @@
 #ifndef SUBDIVISION_BAKER_H
 #define SUBDIVISION_BAKER_H
 
-#include "godot_cpp/classes/global_constants.hpp"
-#include "godot_cpp/classes/importer_mesh.hpp"
-#include "godot_cpp/classes/ref_counted.hpp"
-#include "godot_cpp/core/binder_common.hpp"
-#include "resources/topology_data_mesh.hpp"
+#include "scene/resources/importer_mesh.h"
+#include "core/object/ref_counted.h"
 
-using namespace godot;
+#include "modules/subdiv/src/resources/topology_data_mesh.hpp"
+
 class SubdivisionBaker : public RefCounted {
 	GDCLASS(SubdivisionBaker, RefCounted);
 

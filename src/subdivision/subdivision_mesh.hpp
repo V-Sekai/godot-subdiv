@@ -1,19 +1,12 @@
 #ifndef SUBDIVISION_MESH_H
 #define SUBDIVISION_MESH_H
 
-#include "godot_cpp/classes/global_constants.hpp"
-#include "godot_cpp/classes/wrapped.hpp"
-#include "godot_cpp/core/binder_common.hpp"
+#include "scene/resources/mesh.h"
+#include "scene/3d/mesh_instance_3d.h"
 
-#include "godot_cpp/classes/mesh.hpp"
-#include "godot_cpp/classes/mesh_instance3d.hpp"
+#include "core/templates/hash_map.h"
 
-#include "godot_cpp/templates/hash_map.hpp"
-#include "godot_cpp/templates/vector.hpp"
-
-#include "resources/topology_data_mesh.hpp"
-
-using namespace godot;
+#include "modules/subdiv/src/resources/topology_data_mesh.hpp"
 
 //SubdivisionMesh is only for subdividing ImporterQuadMeshes
 class SubdivisionMesh : public RefCounted {

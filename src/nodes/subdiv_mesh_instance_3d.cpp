@@ -22,15 +22,14 @@ SOFTWARE.
 */
 
 #include "subdiv_mesh_instance_3d.hpp"
-#include "godot_cpp/classes/ref.hpp"
-#include "godot_cpp/classes/rendering_server.hpp"
-#include "godot_cpp/classes/skeleton3d.hpp"
 
-#include "godot_cpp/classes/surface_tool.hpp"
+#include "core/object/ref_counted.h"
+#include "servers/rendering_server.h"
+#include "scene/3d/skeleton_3d.h"
+#include "scene/resources/surface_tool.h"
+#include "scene/main/node.h"
 
-#include "godot_cpp/classes/node.hpp"
-#include "godot_cpp/variant/utility_functions.hpp"
-#include "subdivision/subdivision_server.hpp"
+#include "modules/subdiv/src/subdivision/subdivision_server.hpp"
 
 #include <string>
 
@@ -155,7 +154,7 @@ Ref<Material> SubdivMeshInstance3D::get_surface_material(int p_idx) const {
 
 void SubdivMeshInstance3D::set_skeleton_path(const NodePath &p_path) {
 	if (is_inside_tree()) {
-		Skeleton3D *skeleton = get_node<Skeleton3D>(skeleton_path);
+		Skeleton3D *skeleton = cast_to<Skeleton3D>(get_node(skeleton_path));
 		if (skeleton) {
 			Callable callable = Callable(this, "_update_skinning");
 			if (skeleton->is_connected("pose_updated", callable)) {
@@ -209,7 +208,7 @@ void SubdivMeshInstance3D::set_blend_shape_value(int p_blend_shape, float p_valu
 			ERR_FAIL_COND(surface_vertex_array.size() != blend_shape_vertex_offsets.size());
 			float offset = p_value - last_value;
 			for (int vertex_idx = 0; vertex_idx < surface_vertex_array.size(); vertex_idx++) {
-				surface_vertex_array[vertex_idx] += offset * (blend_shape_vertex_offsets[vertex_idx]);
+				surface_vertex_array.write[vertex_idx] += offset * (blend_shape_vertex_offsets[vertex_idx]);
 			}
 			target_surface[TopologyDataMesh::ARRAY_VERTEX] = surface_vertex_array;
 		}
@@ -272,7 +271,7 @@ void SubdivMeshInstance3D::_update_skinning() {
 			Transform3D transform;
 			transform.origin = origin;
 			transform.basis = Basis(basis_x, basis_y, basis_z);
-			vertex_array[vertex_index] = transform.xform(vertex_array[vertex_index]);
+			vertex_array.write[vertex_index] = transform.xform(vertex_array[vertex_index]);
 		}
 		_update_subdiv_mesh_vertices(surface_index, vertex_array);
 	}
@@ -288,7 +287,7 @@ void SubdivMeshInstance3D::_update_subdiv_mesh_vertices(int p_surface, const Pac
 void SubdivMeshInstance3D::_resolve_skeleton_path() {
 	Ref<SkinReference> new_skin_reference;
 	if (!skeleton_path.is_empty()) {
-		Skeleton3D *skeleton = get_node<Skeleton3D>(skeleton_path);
+		Skeleton3D *skeleton = cast_to<Skeleton3D>(get_node(skeleton_path));
 		if (skeleton) {
 			if (skin_internal.is_null()) {
 				new_skin_reference = skeleton->register_skin(skeleton->create_skin_from_rest_transforms());
@@ -305,7 +304,7 @@ void SubdivMeshInstance3D::_resolve_skeleton_path() {
 
 	if (skin_ref.is_valid()) {
 		RenderingServer::get_singleton()->instance_attach_skeleton(get_instance(), skin_ref->get_skeleton());
-		Skeleton3D *skeleton = get_node<Skeleton3D>(skeleton_path);
+		Skeleton3D *skeleton = cast_to<Skeleton3D>(get_node(skeleton_path));
 		if (skeleton) {
 			Callable callable = Callable(this, "_update_skinning");
 			if (!skeleton->is_connected("pose_updated", callable)) {
@@ -323,14 +322,14 @@ void SubdivMeshInstance3D::_update_subdiv() {
 		return;
 	}
 
-	if (get_mesh().is_null() && subdiv_mesh) {
+	if (get_mesh().is_null() && subdiv_mesh.is_valid()) {
 		subdiv_mesh->clear();
 		return;
 	}
-	if (!subdiv_mesh) {
+	if (subdiv_mesh.is_null()) {
 		SubdivisionServer *subdivision_server = SubdivisionServer::get_singleton();
 		ERR_FAIL_COND(!subdivision_server);
-		subdiv_mesh = Object::cast_to<SubdivisionMesh>(subdivision_server->create_subdivision_mesh(get_mesh(), subdiv_level));
+		subdiv_mesh = subdivision_server->create_subdivision_mesh(get_mesh(), subdiv_level);
 		set_base(subdiv_mesh->get_rid());
 	} else {
 		subdiv_mesh->_update_subdivision(get_mesh(), subdiv_level, cached_data_array);
@@ -401,7 +400,7 @@ void SubdivMeshInstance3D::set_surface_override_material(int p_surface, const Re
 
 	surface_override_materials.write[p_surface] = p_material;
 
-	if (subdiv_mesh) {
+	if (subdiv_mesh.is_valid()) {
 		if (surface_override_materials[p_surface].is_valid()) {
 			RenderingServer::get_singleton()->instance_set_surface_override_material(get_instance(), p_surface, surface_override_materials[p_surface]->get_rid());
 		} else {
@@ -448,13 +447,9 @@ void SubdivMeshInstance3D::_bind_methods() {
 }
 
 SubdivMeshInstance3D::SubdivMeshInstance3D() {
-	subdiv_mesh = NULL;
 	subdiv_level = 0;
 }
 
 SubdivMeshInstance3D::~SubdivMeshInstance3D() {
-	if (subdiv_mesh) {
-		SubdivisionServer::get_singleton()->destroy_subdivision_mesh(subdiv_mesh);
-	}
-	subdiv_mesh = NULL;
+	subdiv_mesh.unref();
 }

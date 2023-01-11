@@ -1,16 +1,18 @@
 #include "baked_subdiv_mesh.hpp"
-#include "godot_cpp/classes/rendering_server.hpp"
-#include "godot_cpp/classes/surface_tool.hpp"
-#include "godot_cpp/variant/utility_functions.hpp"
-#include "resources/topology_data_mesh.hpp"
-#include "subdivision/subdivision_baker.hpp"
-#include "subdivision/subdivision_mesh.hpp"
-#include "subdivision/subdivision_server.hpp"
+
+#include "servers/rendering_server.h"
+#include "scene/resources/surface_tool.h"
+
+#include "modules/subdiv/src/resources/topology_data_mesh.hpp"
+#include "modules/subdiv/src/subdivision/subdivision_baker.hpp"
+#include "modules/subdiv/src/subdivision/subdivision_mesh.hpp"
+#include "modules/subdiv/src/subdivision/subdivision_server.hpp"
 
 void BakedSubdivMesh::set_data_mesh(Ref<TopologyDataMesh> p_data_mesh) {
 	data_mesh = p_data_mesh;
 	_update_subdiv();
 }
+
 Ref<TopologyDataMesh> BakedSubdivMesh::get_data_mesh() const {
 	return data_mesh;
 }
@@ -25,7 +27,8 @@ int BakedSubdivMesh::get_subdiv_level() const {
 
 void BakedSubdivMesh::_update_subdiv() {
 	if (data_mesh.is_valid()) {
-		Ref<SubdivisionBaker> baker = memnew(SubdivisionBaker);
+		Ref<SubdivisionBaker> baker;
+		baker.instantiate();
 		_clear();
 
 		//add blendshapes
@@ -72,7 +75,7 @@ bool BakedSubdivMesh::_set(const StringName &p_name, const Variant &p_value) {
 	}
 	return false;
 }
-bool BakedSubdivMesh::_get(const StringName &p_name, Variant &r_ret) {
+bool BakedSubdivMesh::_get(const StringName &p_name, Variant &r_ret) const {
 	String s_name = p_name;
 	if (s_name == "subdiv_level") {
 		r_ret = get_subdiv_level();

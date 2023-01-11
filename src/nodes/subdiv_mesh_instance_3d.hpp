@@ -23,24 +23,19 @@ SOFTWARE.
 #ifndef SUBDIV_MESH_INSTANCE_3D_H
 #define SUBDIV_MESH_INSTANCE_3D_H
 
-#include "godot_cpp/classes/global_constants.hpp"
-#include "godot_cpp/core/binder_common.hpp"
+#include "scene/resources/immediate_mesh.h"
+#include "scene/3d/mesh_instance_3d.h"
+#include "scene/resources/skin.h"
 
-#include "godot_cpp/classes/immediate_mesh.hpp"
-#include "godot_cpp/classes/mesh_instance3d.hpp"
-#include "godot_cpp/classes/skin.hpp"
-#include "godot_cpp/classes/skin_reference.hpp"
-#include "resources/topology_data_mesh.hpp"
-#include "subdivision/subdivision_mesh.hpp"
-
-using namespace godot;
+#include "modules/subdiv/src/resources/topology_data_mesh.hpp"
+#include "modules/subdiv/src/subdivision/subdivision_mesh.hpp"
 
 class SubdivMeshInstance3D : public GeometryInstance3D {
 	GDCLASS(SubdivMeshInstance3D, GeometryInstance3D)
 
 protected:
 	Ref<TopologyDataMesh> mesh;
-	SubdivisionMesh *subdiv_mesh;
+	Ref<SubdivisionMesh> subdiv_mesh;
 	Ref<Skin> skin;
 	Ref<Skin> skin_internal;
 	Ref<SkinReference> skin_ref;

@@ -1,9 +1,8 @@
 #ifndef QUAD_SUBDIVIDER_H
 #define QUAD_SUBDIVIDER_H
 
-#include "godot_cpp/classes/global_constants.hpp"
-#include "godot_cpp/classes/ref_counted.hpp"
-#include "godot_cpp/core/binder_common.hpp"
+#include "core/object/ref_counted.h"
+
 #include "subdivider.hpp"
 
 class QuadSubdivider : public Subdivider {

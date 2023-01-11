@@ -1,9 +1,10 @@
 #include "topology_data_mesh.hpp"
-#include "godot_cpp/classes/rendering_server.hpp"
-#include "godot_cpp/classes/surface_tool.hpp"
-#include "godot_cpp/variant/utility_functions.hpp"
-#include "subdivision/subdivision_mesh.hpp"
-#include "subdivision/subdivision_server.hpp"
+
+#include "servers/rendering_server.h"
+#include "scene/resources/surface_tool.h"
+
+#include "modules/subdiv/src/subdivision/subdivision_mesh.hpp"
+#include "modules/subdiv/src/subdivision/subdivision_server.hpp"
 
 void TopologyDataMesh::add_surface(const Array &p_arrays, const Array &p_blend_shapes, const Ref<Material> &p_material,
 		const String &p_name, int32_t p_format, TopologyType p_topology_type) {
@@ -188,7 +189,7 @@ TopologyDataMesh::~TopologyDataMesh() {
 }
 
 void TopologyDataMesh::_bind_methods() {
-	ClassDB::bind_method(D_METHOD("add_surface"), &TopologyDataMesh::add_surface);
+	ClassDB::bind_method(D_METHOD("add_surface", "arrays", "blends", "material", "name", "format", "topology_type"), &TopologyDataMesh::add_surface);
 
 	ClassDB::bind_method(D_METHOD("_set_data", "data"), &TopologyDataMesh::_set_data);
 	ClassDB::bind_method(D_METHOD("_get_data"), &TopologyDataMesh::_get_data);

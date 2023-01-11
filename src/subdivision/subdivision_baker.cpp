@@ -1,17 +1,19 @@
 #include "subdivision_baker.hpp"
-#include "godot_cpp/variant/utility_functions.hpp"
+
 #include "quad_subdivider.hpp"
 #include "triangle_subdivider.hpp"
 
 Array SubdivisionBaker::get_baked_arrays(const Array &topology_arrays, int p_level, int64_t p_format, TopologyDataMesh::TopologyType topology_type) {
 	switch (topology_type) {
 		case TopologyDataMesh::QUAD: {
-			Ref<QuadSubdivider> subdivider = memnew(QuadSubdivider);
+			Ref<QuadSubdivider> subdivider;
+			subdivider.instantiate();
 			return subdivider->get_subdivided_arrays(topology_arrays, p_level, p_format, true);
 		}
 
 		case TopologyDataMesh::TRIANGLE: {
-			Ref<TriangleSubdivider> subdivider = memnew(TriangleSubdivider);
+			Ref<TriangleSubdivider> subdivider;
+			subdivider.instantiate();
 			return subdivider->get_subdivided_arrays(topology_arrays, p_level, p_format, true);
 		}
 
@@ -32,7 +34,7 @@ TypedArray<Array> SubdivisionBaker::get_baked_blend_shape_arrays(const Array &ba
 		const PackedVector3Array &blend_shape_relative_vertex_array = single_blend_shape_arrays[0]; //expects relative data
 		PackedVector3Array blend_shape_vertex_array_absolute = topology_vertex_array;
 		for (int vertex_idx = 0; vertex_idx < topology_vertex_array.size(); vertex_idx++) {
-			blend_shape_vertex_array_absolute[vertex_idx] += blend_shape_relative_vertex_array[vertex_idx];
+			blend_shape_vertex_array_absolute.write[vertex_idx] += blend_shape_relative_vertex_array[vertex_idx];
 		}
 
 		blend_shape_arrays[Mesh::ARRAY_VERTEX] = blend_shape_vertex_array_absolute;
@@ -99,7 +101,7 @@ Ref<ArrayMesh> SubdivisionBaker::get_array_mesh(const Ref<ArrayMesh> &p_base, co
 
 	importer_mesh = get_importer_mesh(importer_mesh, p_topology_data_mesh, p_level, bake_blendshapes);
 	if (generate_lods) {
-		importer_mesh->generate_lods(UtilityFunctions::deg_to_rad(25), UtilityFunctions::deg_to_rad(60), Array());
+		importer_mesh->generate_lods(Math::deg_to_rad(real_t(25)), Math::deg_to_rad(real_t(60)), Array());
 	}
 	mesh = importer_mesh->get_mesh(mesh);
 	return mesh;
