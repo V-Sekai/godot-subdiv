@@ -20,7 +20,7 @@ protected:
 		PackedInt32Array uv_index_array;
 		PackedInt32Array index_array;
 		PackedInt32Array bones_array;
-		PackedFloat32Array weights_array;
+		Vector<float> weights_array;
 
 		int32_t vertex_count_per_face = 0;
 		int32_t index_count = 0;

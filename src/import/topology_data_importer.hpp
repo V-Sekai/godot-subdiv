@@ -27,7 +27,7 @@ private:
 		PackedVector2Array uv_array;
 		PackedInt32Array index_array;
 		PackedInt32Array bones_array;
-		PackedFloat32Array weights_array;
+		Vector<float> weights_array;
 	};
 
 	struct SurfaceVertexArrays { //of imported triangle mesh
@@ -36,7 +36,7 @@ private:
 		PackedInt32Array index_array;
 		PackedVector2Array uv_array;
 		PackedInt32Array bones_array; //could be float or int array after docs
-		PackedFloat32Array weights_array;
+		Vector<float> weights_array;
 		SurfaceVertexArrays(const Array &p_mesh_arrays);
 		SurfaceVertexArrays(){};
 	};

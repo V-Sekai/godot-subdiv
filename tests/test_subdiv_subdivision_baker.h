@@ -20,6 +20,6 @@ TEST_CASE("Simple bake") {
 
 	const PackedInt32Array &bones_array = result_arrays[Mesh::ARRAY_BONES];
 	CHECK_EQ(bones_array.size(), vertex_amount * 4);
-	const PackedFloat32Array &weights_array = result_arrays[Mesh::ARRAY_WEIGHTS];
+	const Vector<real_t> &weights_array = result_arrays[Mesh::ARRAY_WEIGHTS];
 	CHECK_EQ(bones_array.size(), weights_array.size());
 }

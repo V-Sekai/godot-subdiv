@@ -327,7 +327,7 @@ int32_t TopologyDataImporter::generate_fake_format(const Array &arrays) const {
 	if (arrays[Mesh::ARRAY_NORMAL].get_type() == Variant::PACKED_VECTOR3_ARRAY) {
 		format |= Mesh::ARRAY_FORMAT_NORMAL;
 	}
-	if (arrays[Mesh::ARRAY_TANGENT].get_type() == Variant::PACKED_FLOAT32_ARRAY) {
+	if (arrays[Mesh::ARRAY_TANGENT].get_type() == Variant::PACKED_FLOAT32_ARRAY || arrays[Mesh::ARRAY_TANGENT].get_type() == Variant::PACKED_FLOAT64_ARRAY) {
 		format |= Mesh::ARRAY_FORMAT_TANGENT;
 	}
 	if (arrays[Mesh::ARRAY_COLOR].get_type() == Variant::PACKED_COLOR_ARRAY) {
@@ -339,10 +339,10 @@ int32_t TopologyDataImporter::generate_fake_format(const Array &arrays) const {
 	if (arrays[Mesh::ARRAY_TEX_UV2].get_type() == Variant::PACKED_VECTOR2_ARRAY) {
 		format |= Mesh::ARRAY_FORMAT_TEX_UV2;
 	}
-	if (arrays[Mesh::ARRAY_BONES].get_type() == Variant::PACKED_INT32_ARRAY || arrays[Mesh::ARRAY_BONES].get_type() == Variant::PACKED_FLOAT32_ARRAY) {
+	if (arrays[Mesh::ARRAY_BONES].get_type() == Variant::PACKED_INT32_ARRAY || arrays[Mesh::ARRAY_BONES].get_type() == Variant::PACKED_FLOAT32_ARRAY || arrays[Mesh::ARRAY_BONES].get_type() == Variant::PACKED_FLOAT64_ARRAY) {
 		format |= Mesh::ARRAY_FORMAT_BONES;
 	}
-	if (arrays[Mesh::ARRAY_WEIGHTS].get_type() == Variant::PACKED_FLOAT32_ARRAY) {
+	if (arrays[Mesh::ARRAY_WEIGHTS].get_type() == Variant::PACKED_FLOAT32_ARRAY || arrays[Mesh::ARRAY_WEIGHTS].get_type() == Variant::PACKED_FLOAT64_ARRAY) {
 		format |= Mesh::ARRAY_FORMAT_WEIGHTS;
 	}
 	if (arrays[Mesh::ARRAY_INDEX].get_type() == Variant::PACKED_INT32_ARRAY) {
@@ -352,7 +352,7 @@ int32_t TopologyDataImporter::generate_fake_format(const Array &arrays) const {
 	//check for custom stuff, probably could extract from flag, but this should work
 	if ((format & Mesh::ARRAY_FORMAT_BONES) && (format & Mesh::ARRAY_FORMAT_WEIGHTS)) {
 		const PackedVector3Array &vertex_array = arrays[Mesh::ARRAY_VERTEX];
-		const PackedFloat32Array &weights_array = arrays[Mesh::ARRAY_WEIGHTS];
+		const Vector<real_t> &weights_array = arrays[Mesh::ARRAY_WEIGHTS];
 		if (vertex_array.size() * 8 == weights_array.size()) {
 			format |= Mesh::ARRAY_FLAG_USE_8_BONE_WEIGHTS;
 		}

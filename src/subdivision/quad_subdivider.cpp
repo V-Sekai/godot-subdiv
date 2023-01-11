@@ -32,7 +32,7 @@ Array QuadSubdivider::_get_triangle_arrays() const {
 			}
 			if (use_bones) {
 				PackedInt32Array bones_array;
-				PackedFloat32Array weights_array;
+				Vector<float> weights_array;
 				for (int bone_index = 0; bone_index < 4; bone_index++) {
 					bones_array.append(topology_data.bones_array[topology_data.index_array[single_quad_index] * 4 + bone_index]);
 					weights_array.append(topology_data.weights_array[topology_data.index_array[single_quad_index] * 4 + bone_index]);

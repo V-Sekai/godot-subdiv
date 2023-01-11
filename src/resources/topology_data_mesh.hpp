@@ -59,8 +59,8 @@ public:
 		PackedVector2Array uv_array;
 		PackedInt32Array uv_index_array;
 		PackedInt32Array index_array;
-		PackedFloat32Array bones_array;
-		PackedFloat32Array weights_array;
+		Vector<real_t> bones_array;
+		Vector<float> weights_array;
 		TopologySurfaceData(Array p_mesh_arrays) {
 			vertex_array = p_mesh_arrays[TopologyDataMesh::ARRAY_VERTEX];
 			normal_array = p_mesh_arrays[TopologyDataMesh::ARRAY_NORMAL];
