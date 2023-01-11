@@ -1,14 +1,10 @@
 #include "subdivider.hpp"
 
+#include "core/templates/hash_set.h"
 #include "scene/resources/mesh_data_tool.h"
 #include "servers/rendering_server.h"
-#include "core/templates/hash_set.h"
 
 #include "modules/subdiv/src/resources/topology_data_mesh.hpp"
-
-//debug
-// #include <chrono>
-// using namespace std::chrono;
 
 using namespace OpenSubdiv;
 typedef Far::TopologyDescriptor Descriptor;
@@ -36,12 +32,12 @@ Subdivider::TopologyData::TopologyData(const Array &p_mesh_arrays, int32_t p_for
 
 struct Vertex {
 	void Clear() { x = y = z = 0; }
-	void AddWithWeight(Vertex const &src, float weight) {
+	void AddWithWeight(Vertex const &src, real_t weight) {
 		x += weight * src.x;
 		y += weight * src.y;
 		z += weight * src.z;
 	}
-	float x, y, z;
+	real_t x, y, z;
 };
 
 struct VertexUV {
@@ -49,13 +45,13 @@ struct VertexUV {
 		u = v = 0.0f;
 	}
 
-	void AddWithWeight(VertexUV const &src, float weight) {
+	void AddWithWeight(VertexUV const &src, real_t weight) {
 		u += weight * src.u;
 		v += weight * src.v;
 	}
 
 	// Basic 'uv' layout channel
-	float u, v;
+	real_t u, v;
 };
 
 struct VertexWeights {
@@ -65,13 +61,13 @@ struct VertexWeights {
 		}
 	}
 
-	void AddWithWeight(VertexWeights const &src, float weight) {
+	void AddWithWeight(VertexWeights const &src, real_t weight) {
 		for (int i = 0; i < weights.size(); i++) {
 			weights.write[i] += src.weights[i] * weight;
 		}
 	}
 
-	PackedFloat32Array weights;
+	Vector<real_t> weights;
 };
 
 Descriptor Subdivider::_create_topology_descriptor(Vector<int> &subdiv_face_vertex_count, Descriptor::FVarChannel *channels, const int32_t p_format) {
@@ -258,9 +254,6 @@ Array Subdivider::get_subdivided_topology_arrays(const Array &p_arrays, int p_le
 
 void Subdivider::subdivide(const Array &p_arrays, int p_level, int32_t p_format, bool calculate_normals) {
 	ERR_FAIL_COND(p_level < 0);
-	const bool use_uv = p_format & Mesh::ARRAY_FORMAT_TEX_UV;
-	const bool use_bones = (p_format & Mesh::ARRAY_FORMAT_BONES) && (p_format & Mesh::ARRAY_FORMAT_WEIGHTS);
-
 	topology_data = TopologyData(p_arrays, p_format, _get_vertices_per_face_count());
 	//if p_level is not 0 subdivide mesh and store in topology_data again
 	if (p_level != 0) {
