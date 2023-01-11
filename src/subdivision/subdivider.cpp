@@ -261,7 +261,6 @@ void Subdivider::subdivide(const Array &p_arrays, int p_level, int32_t p_format,
 		ERR_FAIL_COND_MSG(!refiner, "Refiner couldn't be created, numVertsPerFace array likely lost.");
 		_create_subdivision_vertices(refiner, p_level, p_format);
 		_create_subdivision_faces(refiner, p_level, p_format);
-		//free memory
 
 		delete refiner;
 	}
