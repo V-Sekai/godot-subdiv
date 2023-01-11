@@ -1,7 +1,7 @@
 #include "baked_subdiv_mesh.hpp"
 
-#include "servers/rendering_server.h"
 #include "scene/resources/surface_tool.h"
+#include "servers/rendering_server.h"
 
 #include "modules/subdiv/src/resources/topology_data_mesh.hpp"
 #include "modules/subdiv/src/subdivision/subdivision_baker.hpp"
@@ -70,8 +70,19 @@ bool BakedSubdivMesh::_set(const StringName &p_name, const Variant &p_value) {
 	if (s_name == "subdiv_level") {
 		set_subdiv_level(p_value); //updates subdiv
 		return true;
-	} else if (s_name.begins_with("_surfaces") || s_name.begins_with("_blend_shape_names")) {
-		return true;
+	} else if (s_name.begins_with("surface_")) {
+		if (data_mesh.is_null()) {
+			return false;
+		}
+		int surface_index = s_name.get_slice("surface_", 1).to_int();
+		String what = s_name.get_slicec('/', 1);
+		if (what == "name") {
+			data_mesh->surface_set_name(surface_index, p_value);
+			return true;
+		} else if (what == "material") {
+			data_mesh->surface_set_material(surface_index, p_value);
+			return true;
+		}
 	}
 	return false;
 }
@@ -80,8 +91,18 @@ bool BakedSubdivMesh::_get(const StringName &p_name, Variant &r_ret) const {
 	if (s_name == "subdiv_level") {
 		r_ret = get_subdiv_level();
 		return true;
-	} else if (s_name.begins_with("_surfaces") || s_name.begins_with("_blend_shape_names")) {
-		return true;
+	} else if (s_name.begins_with("surface_")) {
+		int surface_index = s_name.get_slice("surface_", 1).to_int();
+		String what = s_name.get_slicec('/', 1);
+		if (what == "name") {
+			r_ret = data_mesh->surface_get_name(surface_index);
+			return true;
+		} else if (what == "material") {
+			r_ret = data_mesh->surface_get_material(surface_index);
+			return true;
+		}
+	} else if (s_name.begins_with("_blend_shape_names")) {
+		return false;
 	}
 
 	return false;

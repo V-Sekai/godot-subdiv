@@ -28,5 +28,5 @@ animation/fps=30
 animation/trimming=false
 import_script/path=""
 _subresources={}
-subdivision/import_as="BakedSubdivMesh (bake at runtime)"
-subdivision/subdivision_level=0
+subdivision/import_as="ImporterMesh (bake at import)"
+subdivision/subdivision_level=1

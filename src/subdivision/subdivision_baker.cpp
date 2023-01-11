@@ -55,7 +55,7 @@ TypedArray<Array> SubdivisionBaker::get_baked_blend_shape_arrays(const Array &ba
 
 Ref<ImporterMesh> SubdivisionBaker::get_importer_mesh(const Ref<ImporterMesh> &p_base, const Ref<TopologyDataMesh> &p_topology_data_mesh, int32_t p_level, bool bake_blendshapes) {
 	Ref<ImporterMesh> mesh;
-	if (!p_base.is_null()) {
+	if (p_base.is_valid()) {
 		mesh = p_base;
 	}
 	if (mesh.is_null()) {
@@ -83,27 +83,9 @@ Ref<ImporterMesh> SubdivisionBaker::get_importer_mesh(const Ref<ImporterMesh> &p
 					p_level, p_format, topology_type);
 		}
 
-		mesh->add_surface(Mesh::PRIMITIVE_TRIANGLES, surface_baked_arrays, baked_blend_shape_arrays, Dictionary(), surface_material, surface_name, 0);
+		mesh->add_surface(Mesh::PRIMITIVE_TRIANGLES, surface_baked_arrays, baked_blend_shape_arrays, Dictionary(), surface_material, surface_name, p_format);
 	}
 
-	return mesh;
-}
-
-Ref<ArrayMesh> SubdivisionBaker::get_array_mesh(const Ref<ArrayMesh> &p_base, const Ref<TopologyDataMesh> &p_topology_data_mesh, int32_t p_level, bool generate_lods, bool bake_blendshapes) {
-	Ref<ArrayMesh> mesh;
-	Ref<ImporterMesh> importer_mesh;
-	if (!p_base.is_null()) {
-		mesh = p_base;
-	}
-	if (mesh.is_null()) {
-		mesh.instantiate();
-	}
-
-	importer_mesh = get_importer_mesh(importer_mesh, p_topology_data_mesh, p_level, bake_blendshapes);
-	if (generate_lods) {
-		importer_mesh->generate_lods(Math::deg_to_rad(real_t(25)), Math::deg_to_rad(real_t(60)), Array());
-	}
-	mesh = importer_mesh->get_mesh(mesh);
 	return mesh;
 }
 
@@ -113,5 +95,4 @@ SubdivisionBaker::~SubdivisionBaker() {}
 void SubdivisionBaker::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_baked_arrays", "topology_arrays", "subdivision_level", "format", "topology_type"), &SubdivisionBaker::get_baked_arrays);
 	ClassDB::bind_method(D_METHOD("get_importer_mesh", "base", "topology_data_mesh", "subdivision_level"), &SubdivisionBaker::get_importer_mesh);
-	ClassDB::bind_method(D_METHOD("get_array_mesh", "base", "topology_data_mesh", "subdivision_level", "generate_lods"), &SubdivisionBaker::get_array_mesh);
 }

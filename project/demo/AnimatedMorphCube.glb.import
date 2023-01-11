@@ -29,4 +29,4 @@ animation/trimming=false
 import_script/path=""
 _subresources={}
 subdivision/import_as="BakedSubdivMesh (bake at runtime)"
-subdivision/subdivision_level=1
+subdivision/subdivision_level=0

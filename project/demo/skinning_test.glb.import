@@ -29,4 +29,8 @@ animation/trimming=false
 import_script/path=""
 _subresources={}
 subdivision/import_as="ImporterMesh (bake at import)"
-subdivision/subdivision_level=1
+subdivision/subdivision_level=4
+
+[post_import]
+
+pipeline=null

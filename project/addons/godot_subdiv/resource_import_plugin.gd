@@ -39,11 +39,11 @@ func _get_import_options(path, preset_index):
 		{
 		"name": "import_as",
 		"property_hint": PROPERTY_HINT_ENUM,
-		"default_value": "SubdivMeshInstance3D",
-		"hint_string": "SubdivMeshInstance3D,BakedSubdivMesh (bake at runtime),ArrayMesh (bake at import)"
+		"default_value": "BakedSubdivMesh",
+		"hint_string": "BakedSubdivMesh (bake at runtime),ImporterMesh (bake at import)"
 		},
 		{
-		"name": "sudbivision_level",
+		"name": "subdivision_level",
 		"default_value": 0,
 		"property_hint": PROPERTY_HINT_RANGE,
 		"hint_string": "0,6"

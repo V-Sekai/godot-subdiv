@@ -3,15 +3,13 @@
 #include "core/templates/hash_map.h"
 #include "core/templates/hash_set.h"
 
-#include "scene/resources/mesh.h"
-#include "scene/resources/importer_mesh.h"
-#include "scene/resources/importer_mesh.h"
 #include "scene/3d/importer_mesh_instance_3d.h"
 #include "scene/3d/mesh_instance_3d.h"
-#include "scene/main/scene_tree.h"
 #include "scene/3d/skeleton_3d.h"
+#include "scene/main/scene_tree.h"
+#include "scene/resources/importer_mesh.h"
+#include "scene/resources/mesh.h"
 
-#include "modules/subdiv/src/nodes/subdiv_mesh_instance_3d.hpp"
 #include "modules/subdiv/src/resources/baked_subdiv_mesh.hpp"
 #include "modules/subdiv/src/subdivision/subdivision_baker.hpp"
 
@@ -23,9 +21,7 @@ TopologyDataImporter::~TopologyDataImporter() {
 
 void TopologyDataImporter::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("convert_importer_meshinstance_to_subdiv", "object", "mode", "level"), &TopologyDataImporter::convert_importer_meshinstance_to_subdiv);
-	BIND_ENUM_CONSTANT(SUBDIV_MESHINSTANCE);
 	BIND_ENUM_CONSTANT(BAKED_SUBDIV_MESH);
-	BIND_ENUM_CONSTANT(ARRAY_MESH);
 	BIND_ENUM_CONSTANT(IMPORTER_MESH)
 }
 
@@ -48,10 +44,6 @@ void TopologyDataImporter::convert_importer_meshinstance_to_subdiv(Object *impor
 	//handle cases that don't need to generate TopologyDataMesh
 	if (subdiv_level == 0) {
 		if (import_mode == ImportMode::IMPORTER_MESH) {
-			return;
-		}
-		if (import_mode == ImportMode::ARRAY_MESH) {
-			_replace_importer_mesh_instance_with_mesh_instance(importer_mesh_instance);
 			return;
 		}
 	}
@@ -103,25 +95,6 @@ void TopologyDataImporter::convert_importer_meshinstance_to_subdiv(Object *impor
 
 	StringName mesh_instance_name = importer_mesh_instance->get_name();
 	switch (import_mode) {
-		case ImportMode::SUBDIV_MESHINSTANCE: {
-			//creates subdiv mesh instance with topologydatamesh
-			SubdivMeshInstance3D *subdiv_mesh_instance = memnew(SubdivMeshInstance3D);
-			// skin data and such are not changed and will just be applied to generated helper triangle mesh later.
-			subdiv_mesh_instance->set_skeleton_path(importer_mesh_instance->get_skeleton_path());
-			if (!importer_mesh_instance->get_skin().is_null()) {
-				subdiv_mesh_instance->set_skin(importer_mesh_instance->get_skin());
-			}
-			subdiv_mesh_instance->set_transform(importer_mesh_instance->get_transform());
-			subdiv_mesh_instance->set_mesh(topology_data_mesh);
-
-			subdiv_mesh_instance->set_subdiv_level(subdiv_level);
-
-			// replace importermeshinstance in scene
-			importer_mesh_instance->replace_by(subdiv_mesh_instance, false);
-			subdiv_mesh_instance->set_name(mesh_instance_name);
-			memdelete(importer_mesh_instance);
-			break;
-		}
 		case ImportMode::BAKED_SUBDIV_MESH: {
 			Ref<BakedSubdivMesh> subdiv_mesh;
 			subdiv_mesh.instantiate();
@@ -131,10 +104,13 @@ void TopologyDataImporter::convert_importer_meshinstance_to_subdiv(Object *impor
 			subdiv_mesh->set_blend_shape_mode(Mesh::BLEND_SHAPE_MODE_NORMALIZED); //otherwise data would need to be converted
 
 			MeshInstance3D *mesh_instance = Object::cast_to<MeshInstance3D>(_replace_importer_mesh_instance_with_mesh_instance(importer_mesh_instance));
+
+			// replace importermeshinstance in scene
+			importer_mesh_instance->replace_by(mesh_instance, false);
+			mesh_instance->set_name(mesh_instance_name);
 			mesh_instance->set_mesh(subdiv_mesh);
 			break;
 		}
-		case ImportMode::ARRAY_MESH:
 		case ImportMode::IMPORTER_MESH: {
 			Ref<ImporterMesh> subdiv_importer_mesh;
 			subdiv_importer_mesh.instantiate();
@@ -348,29 +324,38 @@ int32_t TopologyDataImporter::generate_fake_format(const Array &arrays) const {
 	ERR_FAIL_COND_V(arrays[Mesh::ARRAY_VERTEX].get_type() != Variant::PACKED_VECTOR3_ARRAY, 0);
 	int32_t format = Mesh::ARRAY_FORMAT_VERTEX;
 
-	if (arrays[Mesh::ARRAY_NORMAL].get_type() == Variant::PACKED_VECTOR3_ARRAY)
+	if (arrays[Mesh::ARRAY_NORMAL].get_type() == Variant::PACKED_VECTOR3_ARRAY) {
 		format |= Mesh::ARRAY_FORMAT_NORMAL;
-	if (arrays[Mesh::ARRAY_TANGENT].get_type() == Variant::PACKED_FLOAT32_ARRAY)
+	}
+	if (arrays[Mesh::ARRAY_TANGENT].get_type() == Variant::PACKED_FLOAT32_ARRAY) {
 		format |= Mesh::ARRAY_FORMAT_TANGENT;
-	if (arrays[Mesh::ARRAY_COLOR].get_type() == Variant::PACKED_COLOR_ARRAY)
+	}
+	if (arrays[Mesh::ARRAY_COLOR].get_type() == Variant::PACKED_COLOR_ARRAY) {
 		format |= Mesh::ARRAY_FORMAT_COLOR;
-	if (arrays[Mesh::ARRAY_TEX_UV].get_type() == Variant::PACKED_VECTOR2_ARRAY)
+	}
+	if (arrays[Mesh::ARRAY_TEX_UV].get_type() == Variant::PACKED_VECTOR2_ARRAY) {
 		format |= Mesh::ARRAY_FORMAT_TEX_UV;
-	if (arrays[Mesh::ARRAY_TEX_UV2].get_type() == Variant::PACKED_VECTOR2_ARRAY)
+	}
+	if (arrays[Mesh::ARRAY_TEX_UV2].get_type() == Variant::PACKED_VECTOR2_ARRAY) {
 		format |= Mesh::ARRAY_FORMAT_TEX_UV2;
-	if (arrays[Mesh::ARRAY_BONES].get_type() == Variant::PACKED_INT32_ARRAY)
+	}
+	if (arrays[Mesh::ARRAY_BONES].get_type() == Variant::PACKED_INT32_ARRAY || arrays[Mesh::ARRAY_BONES].get_type() == Variant::PACKED_FLOAT32_ARRAY) {
 		format |= Mesh::ARRAY_FORMAT_BONES;
-	if (arrays[Mesh::ARRAY_WEIGHTS].get_type() == Variant::PACKED_FLOAT32_ARRAY)
+	}
+	if (arrays[Mesh::ARRAY_WEIGHTS].get_type() == Variant::PACKED_FLOAT32_ARRAY) {
 		format |= Mesh::ARRAY_FORMAT_WEIGHTS;
-	if (arrays[Mesh::ARRAY_INDEX].get_type() == Variant::PACKED_INT32_ARRAY)
+	}
+	if (arrays[Mesh::ARRAY_INDEX].get_type() == Variant::PACKED_INT32_ARRAY) {
 		format |= Mesh::ARRAY_FORMAT_INDEX;
+	}
 
 	//check for custom stuff, probably could extract from flag, but this should work
 	if ((format & Mesh::ARRAY_FORMAT_BONES) && (format & Mesh::ARRAY_FORMAT_WEIGHTS)) {
 		const PackedVector3Array &vertex_array = arrays[Mesh::ARRAY_VERTEX];
 		const PackedFloat32Array &weights_array = arrays[Mesh::ARRAY_WEIGHTS];
-		if (vertex_array.size() * 8 == weights_array.size())
+		if (vertex_array.size() * 8 == weights_array.size()) {
 			format |= Mesh::ARRAY_FLAG_USE_8_BONE_WEIGHTS;
+		}
 	}
 
 	return format;

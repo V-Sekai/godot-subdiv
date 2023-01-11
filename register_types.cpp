@@ -3,7 +3,6 @@
 #include "core/object/class_db.h"
 
 #include "modules/subdiv/src/import/topology_data_importer.hpp"
-#include "modules/subdiv/src/nodes/subdiv_mesh_instance_3d.hpp"
 #include "modules/subdiv/src/resources/baked_subdiv_mesh.hpp"
 #include "modules/subdiv/src/resources/topology_data_mesh.hpp"
 #include "modules/subdiv/src/subdivision/subdivision_baker.hpp"
@@ -31,8 +30,6 @@ void initialize_subdiv_module(ModuleInitializationLevel p_level) {
 		ClassDB::register_class<SubdivisionMesh>();
 		ClassDB::register_class<SubdivisionBaker>();
 
-		ClassDB::register_class<SubdivMeshInstance3D>();
-
 		ClassDB::register_class<TopologyDataImporter>();
 
 		ClassDB::register_class<TopologyDataMesh>();
@@ -46,6 +43,5 @@ void initialize_subdiv_module(ModuleInitializationLevel p_level) {
 void uninitialize_subdiv_module(ModuleInitializationLevel p_level) {
   if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
 		Engine::get_singleton()->remove_singleton("SubdivisionServer");
-		memdelete(_subdivision_server);
   }
 }

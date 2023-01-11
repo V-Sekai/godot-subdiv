@@ -16,9 +16,7 @@ protected:
 
 public:
 	enum ImportMode {
-		SUBDIV_MESHINSTANCE = 0,
 		BAKED_SUBDIV_MESH = 1,
-		ARRAY_MESH = 2,
 		IMPORTER_MESH = 3
 	};
 
@@ -56,7 +54,6 @@ private:
 public:
 	TopologyDataImporter();
 	~TopologyDataImporter();
-	void convert_meshinstance_to_subdiv(Object *p_meshinstance, ImportMode import_mode, int32_t subdiv_level);
 	void convert_importer_meshinstance_to_subdiv(Object *p_meshinstance, ImportMode import_mode, int32_t subdiv_level);
 };
 
