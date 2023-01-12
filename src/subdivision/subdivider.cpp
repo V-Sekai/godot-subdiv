@@ -199,7 +199,7 @@ void Subdivider::_create_subdivision_vertices(Far::TopologyRefiner *refiner, con
 		VertexWeights *src_weights = (VertexWeights *)all_vertex_bone_weights.ptrw();
 		for (int level = 0; level < p_level; ++level) {
 			VertexWeights *dst_weights = src_weights + refiner->GetLevel(level).GetNumVertices();
-			primvar_refiner.Interpolate(level + 1, src_weights, dst_weights);
+			primvar_refiner.InterpolateVarying(level + 1, src_weights, dst_weights);
 			src_weights = dst_weights;
 		}
 
