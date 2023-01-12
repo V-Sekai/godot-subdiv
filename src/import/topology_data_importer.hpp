@@ -5,7 +5,7 @@
 #include "core/object/object.h"
 #include "core/templates/hash_map.h"
 
-#include "modules/subdiv/src/resources/topology_data_mesh.hpp"
+#include "../resources/topology_data_mesh.hpp"
 
 class TopologyDataImporter : public Object {
 	GDCLASS(TopologyDataImporter, Object);

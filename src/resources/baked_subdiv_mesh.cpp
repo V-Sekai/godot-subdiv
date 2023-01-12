@@ -3,7 +3,7 @@
 #include "scene/resources/surface_tool.h"
 #include "servers/rendering_server.h"
 
-#include "modules/subdiv/src/resources/topology_data_mesh.hpp"
+#include "../resources/topology_data_mesh.hpp"
 #include "modules/subdiv/src/subdivision/subdivision_baker.hpp"
 #include "modules/subdiv/src/subdivision/subdivision_mesh.hpp"
 #include "modules/subdiv/src/subdivision/subdivision_server.hpp"

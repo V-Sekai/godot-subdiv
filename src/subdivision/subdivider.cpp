@@ -4,7 +4,7 @@
 #include "scene/resources/mesh_data_tool.h"
 #include "servers/rendering_server.h"
 
-#include "modules/subdiv/src/resources/topology_data_mesh.hpp"
+#include "../resources/topology_data_mesh.hpp"
 
 using namespace OpenSubdiv;
 typedef Far::TopologyDescriptor Descriptor;

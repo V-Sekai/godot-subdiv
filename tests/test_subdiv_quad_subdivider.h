@@ -4,7 +4,7 @@
 
 #include "core/io/resource_loader.h"
 
-#include "modules/subdiv/src/resources/topology_data_mesh.hpp"
+#include "../../src/resources/topology_data_mesh.hpp"
 #include "modules/subdiv/src/subdivision/quad_subdivider.hpp"
 
 #include "subdiv_utility_methods.h"

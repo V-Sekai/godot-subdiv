@@ -4,7 +4,7 @@
 #include "scene/resources/importer_mesh.h"
 #include "core/object/ref_counted.h"
 
-#include "modules/subdiv/src/resources/topology_data_mesh.hpp"
+#include "../resources/topology_data_mesh.hpp"
 
 class SubdivisionBaker : public RefCounted {
 	GDCLASS(SubdivisionBaker, RefCounted);

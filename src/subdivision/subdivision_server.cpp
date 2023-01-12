@@ -3,7 +3,7 @@
 #include "core/object/class_db.h"
 #include "subdivision_mesh.hpp"
 
-#include "modules/subdiv/src/resources/topology_data_mesh.hpp"
+#include "../resources/topology_data_mesh.hpp"
 
 SubdivisionServer *SubdivisionServer::singleton = nullptr;
 
