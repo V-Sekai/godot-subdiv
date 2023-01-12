@@ -10,8 +10,8 @@
 #include "scene/resources/importer_mesh.h"
 #include "scene/resources/mesh.h"
 
-#include "modules/subdiv/src/resources/baked_subdiv_mesh.hpp"
-#include "modules/subdiv/src/subdivision/subdivision_baker.hpp"
+#include "../resources/baked_subdiv_mesh.hpp"
+#include "../subdivision/subdivision_baker.hpp"
 
 TopologyDataImporter::TopologyDataImporter() {
 }

@@ -4,7 +4,7 @@
 
 #include "core/io/resource_loader.h"
 #include "../src/resources/topology_data_mesh.hpp"
-#include "modules/subdiv/src/subdivision/triangle_subdivider.hpp"
+#include "../src/subdivision/triangle_subdivider.hpp"
 #include "subdiv_utility_methods.h"
 
 //I don't think a lot of unit tests are needed for this. If it outputs non empty data subdivision very likely worked since opensubdiv let the data through

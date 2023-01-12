@@ -1,7 +1,7 @@
 #pragma once
 
 #include "core/io/resource_loader.h"
-#include "modules/subdiv/src/subdivision/subdivision_baker.hpp"
+#include "../src/subdivision/subdivision_baker.hpp"
 #include "tests/test_macros.h"
 
 //just checks for non empty usable data

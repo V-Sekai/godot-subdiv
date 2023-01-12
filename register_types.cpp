@@ -2,16 +2,16 @@
 
 #include "core/object/class_db.h"
 
-#include "modules/subdiv/src/import/topology_data_importer.hpp"
-#include "modules/subdiv/src/resources/baked_subdiv_mesh.hpp"
-#include "modules/subdiv/src/subdivision/subdivision_baker.hpp"
-#include "modules/subdiv/src/subdivision/subdivision_mesh.hpp"
-#include "modules/subdiv/src/subdivision/subdivision_server.hpp"
+#include "src/import/topology_data_importer.hpp"
+#include "src/resources/baked_subdiv_mesh.hpp"
+#include "src/subdivision/subdivision_baker.hpp"
+#include "src/subdivision/subdivision_mesh.hpp"
+#include "src/subdivision/subdivision_server.hpp"
 #include "src/resources/topology_data_mesh.hpp"
 
-#include "modules/subdiv/src/subdivision/quad_subdivider.hpp"
-#include "modules/subdiv/src/subdivision/subdivider.hpp"
-#include "modules/subdiv/src/subdivision/triangle_subdivider.hpp"
+#include "src/subdivision/quad_subdivider.hpp"
+#include "src/subdivision/subdivider.hpp"
+#include "src/subdivision/triangle_subdivider.hpp"
 
 #ifdef TESTS_ENABLED
 #include "subdiv_test.hpp"
