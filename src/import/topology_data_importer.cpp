@@ -41,12 +41,7 @@ void TopologyDataImporter::convert_importer_meshinstance_to_subdiv(Object *impor
 	Ref<ImporterMesh> importer_mesh = importer_mesh_instance->get_mesh();
 	ERR_FAIL_COND_MSG(importer_mesh.is_null(), "Mesh is null");
 
-	//handle cases that don't need to generate TopologyDataMesh
-	if (subdiv_level == 0) {
-		if (import_mode == ImportMode::IMPORTER_MESH) {
-			return;
-		}
-	}
+	// Always generate to flush out any errors.
 
 	Ref<TopologyDataMesh> topology_data_mesh;
 	topology_data_mesh.instantiate();
