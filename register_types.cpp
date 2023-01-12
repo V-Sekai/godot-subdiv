@@ -4,7 +4,7 @@
 
 #include "modules/subdiv/src/import/topology_data_importer.hpp"
 #include "modules/subdiv/src/resources/baked_subdiv_mesh.hpp"
-#include "../resources/topology_data_mesh.hpp"
+#include "src/resources/topology_data_mesh.hpp"
 #include "modules/subdiv/src/subdivision/subdivision_baker.hpp"
 #include "modules/subdiv/src/subdivision/subdivision_mesh.hpp"
 #include "modules/subdiv/src/subdivision/subdivision_server.hpp"
