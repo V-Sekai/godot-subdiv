@@ -110,7 +110,8 @@ Far::TopologyRefiner *Subdivider::_create_topology_refiner(const int32_t p_level
 
 	Sdc::SchemeType type = _get_refiner_type();
 	Sdc::Options options;
-	options.SetVtxBoundaryInterpolation(Sdc::Options::VTX_BOUNDARY_EDGE_ONLY);
+	options.SetVtxBoundaryInterpolation(Sdc::Options::VTX_BOUNDARY_EDGE_AND_CORNER);	
+    options.SetFVarLinearInterpolation(Sdc::Options::FVAR_LINEAR_CORNERS_PLUS2);
 
 	Far::TopologyRefinerFactory<Descriptor>::Options create_options(type, options);
 
