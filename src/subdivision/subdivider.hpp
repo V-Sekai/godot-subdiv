@@ -3,8 +3,8 @@
 
 #include "core/object/ref_counted.h"
 
-#include "modules/subdiv/thirdparty/opensubdiv/far/primvarRefiner.h"
-#include "modules/subdiv/thirdparty/opensubdiv/far/topologyDescriptor.h"
+#include "../../thirdparty/opensubdiv/far/primvarRefiner.h"
+#include "../../thirdparty/opensubdiv/far/topologyDescriptor.h"
 
 class Subdivider : public RefCounted {
 	GDCLASS(Subdivider, RefCounted);
