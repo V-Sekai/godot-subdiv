@@ -69,21 +69,7 @@ struct VertexWeights {
 
 	void AddWithWeight(VertexWeights const &src, float weight) {
 		for (int i = 0; i < weights.size(); i++) {
-			if (src.weights[i].bone_id == weights[i].bone_id) {
-				weights.write[i].weight += src.weights[i].weight * weight;
-				continue;
-			}
-			weights.write[i].weight += src.weights[i].weight * weight / 2.0;
-		}
-		float sum = 0.0f;
-		for (int i = 0; i < weights.size(); i++) {
-			sum += weights[i].weight;
-		}
-		if (sum == 0) {
-			sum = 1;
-		}
-		for (int i = 0; i < weights.size(); i++) {
-			weights.write[i].weight /= sum;
+			weights.write[i].weight += src.weights[i].weight * weight;
 		}
 	}
 
