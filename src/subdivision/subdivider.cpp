@@ -293,7 +293,6 @@ void Subdivider::subdivide(const Array &p_arrays, int p_level, int32_t p_format,
 	}
 }
 
-//TODO: virtual calls are not implemented yet in godot cpp (I think, it wasnt 2 weeks ago and didn't see any commit)
 OpenSubdiv::Sdc::SchemeType Subdivider::_get_refiner_type() const {
 	return Sdc::SchemeType::SCHEME_CATMARK;
 }
