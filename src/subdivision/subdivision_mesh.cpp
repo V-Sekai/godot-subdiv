@@ -91,8 +91,6 @@ void SubdivisionMesh::update_subdivision_vertices(int p_surface, const PackedVec
 	uint8_t *vertex_write_buffer = vertex_buffer.ptrw();
 
 	uint32_t vertex_stride = sizeof(float) * 3; //vector3 size
-	int normal_offset = vertex_stride;
-	int tangent_offset = vertex_stride + sizeof(int);
 
 	if (vertex_buffer.size() / vertex_stride != vertex_array_out.size() && vertex_buffer.size() % vertex_array_out.size() == 0) {
 		vertex_stride = vertex_buffer.size() / vertex_array_out.size(); //if not already equal likely also contains normals and/or tangents
@@ -100,10 +98,6 @@ void SubdivisionMesh::update_subdivision_vertices(int p_surface, const PackedVec
 	}
 
 	ERR_FAIL_COND(vertex_buffer.size() / vertex_stride != vertex_array_out.size());
-
-	bool has_normals = vertex_stride >= sizeof(float) * 4;
-	bool has_tangents = vertex_stride >= sizeof(float) * 5; //TODO: tangents don't get returned because uv's not interpolated
-	// for skinning
 
 	for (int vertex_index = 0; vertex_index < vertex_array_out.size(); vertex_index++) {
 		memcpy(&vertex_write_buffer[vertex_index * vertex_stride], &vertex_array_out[vertex_index], sizeof(float) * 3);
