@@ -69,7 +69,21 @@ struct VertexWeights {
 
 	void AddWithWeight(VertexWeights const &src, float weight) {
 		for (int i = 0; i < weights.size(); i++) {
-			weights.write[i].weight += src.weights[i].weight * weight;
+			if (src.weights[i].bone_id == weights[i].bone_id) {
+				weights.write[i].weight += src.weights[i].weight * weight;
+				continue;
+			}
+			weights.write[i].weight += src.weights[i].weight * weight / 2.0;
+		}
+		float sum = 0.0f;
+		for (int i = 0; i < weights.size(); i++) {
+			sum += weights[i].weight;
+		}
+		if (sum == 0) {
+			sum = 1;
+		}
+		for (int i = 0; i < weights.size(); i++) {
+			weights.write[i].weight /= sum;
 		}
 	}
 
@@ -214,7 +228,7 @@ void Subdivider::_create_subdivision_vertices(Far::TopologyRefiner *refiner, con
 			const Vector<Bone> &vertex_bones_weights = all_vertex_bone_weights[vertex_index];
 
 			for (int weight_index = 0; weight_index <= highest_bone_index; weight_index++) {
-				if (vertex_bones_weights[weight_index].bone_id != 0 && (vertex_bones_index[highest_bone_index - 1] == -1 || vertex_bones_weights[highest_bone_index - 1].bone_id > vertex_bones_weights[vertex_bones_index[highest_bone_index - 1]].bone_id)) {
+				if (vertex_bones_weights[weight_index].weight != 0 && (vertex_bones_index[highest_bone_index - 1] == -1 || vertex_bones_weights[highest_bone_index - 1].bone_id > vertex_bones_weights[vertex_bones_index[highest_bone_index - 1]].bone_id)) {
 					vertex_bones_index.write[highest_bone_index - 1] = weight_index;
 					//move to right place, highest weight at position 0
 					for (int i = highest_bone_index - 2; i >= 0; i--) {
