@@ -54,36 +54,40 @@ struct VertexUV {
 	real_t u, v;
 };
 
+struct Bone {
+	int32_t bone_id = -1;
+	float weight = 0.0f;
+};
+
 struct VertexWeights {
 	void Clear() {
 		for (int i = 0; i < weights.size(); i++) {
-			weights.write[i] = 0;
+			weights.write[i].bone_id = -1;
+			weights.write[i].weight = 0;
 		}
 	}
 
 	void AddWithWeight(VertexWeights const &src, float weight) {
 		for (int i = 0; i < weights.size(); i++) {
-			weights.write[i] += src.weights[i] * weight;
+			if (src.weights[i].bone_id == weights[i].bone_id) {
+				weights.write[i].weight += src.weights[i].weight * weight;
+				continue;
+			}
+			weights.write[i].weight += src.weights[i].weight * weight / 2.0;
 		}
 		float sum = 0.0f;
 		for (int i = 0; i < weights.size(); i++) {
-			sum += weights[i];
+			sum += weights[i].weight;
 		}
 		if (sum == 0) {
 			sum = 1;
 		}
 		for (int i = 0; i < weights.size(); i++) {
-			weights.write[i] /= sum;
-			if (Math::is_zero_approx(weights[i])) {
-				weights.write[i] = 0.0f;
-			}
-			if (Math::is_equal_approx(weights[i], 1.0f)) {
-				weights.write[i] = 1.0f;
-			}
+			weights.write[i].weight /= sum;
 		}
 	}
 
-	PackedFloat32Array weights;
+	Vector<Bone> weights;
 };
 
 Descriptor Subdivider::_create_topology_descriptor(Vector<int> &subdiv_face_vertex_count, Descriptor::FVarChannel *channels, const int32_t p_format) {
@@ -186,7 +190,7 @@ void Subdivider::_create_subdivision_vertices(Far::TopologyRefiner *refiner, con
 		}
 
 		//create array with all weights per vertex
-		Vector<PackedFloat32Array> all_vertex_bone_weights; //will contain all weights per vertex indexed to bones
+		Vector<Vector<Bone>> all_vertex_bone_weights; //will contain all weights per vertex indexed to bones
 		all_vertex_bone_weights.resize(topology_data.vertex_count);
 
 		//resize to fit all weights
@@ -199,7 +203,8 @@ void Subdivider::_create_subdivision_vertices(Far::TopologyRefiner *refiner, con
 			for (int weight_index = 0; weight_index < 4; weight_index++) {
 				if (topology_data.weights_array[vertex_index * 4 + weight_index] != 0.0f) {
 					int bone_index = topology_data.bones_array[vertex_index * 4 + weight_index];
-					all_vertex_bone_weights.write[vertex_index].write[bone_index] = topology_data.weights_array[vertex_index * 4 + weight_index];
+					all_vertex_bone_weights.write[vertex_index].write[bone_index].bone_id = bone_index;
+					all_vertex_bone_weights.write[vertex_index].write[bone_index].weight = topology_data.weights_array[vertex_index * 4 + weight_index];
 				}
 			}
 		}
@@ -208,7 +213,7 @@ void Subdivider::_create_subdivision_vertices(Far::TopologyRefiner *refiner, con
 		VertexWeights *src_weights = (VertexWeights *)all_vertex_bone_weights.ptrw();
 		for (int level = 0; level < p_level; ++level) {
 			VertexWeights *dst_weights = src_weights + refiner->GetLevel(level).GetNumVertices();
-			primvar_refiner.Interpolate(level + 1, src_weights, dst_weights);
+			primvar_refiner.InterpolateVarying(level + 1, src_weights, dst_weights);
 			src_weights = dst_weights;
 		}
 
@@ -216,34 +221,34 @@ void Subdivider::_create_subdivision_vertices(Far::TopologyRefiner *refiner, con
 		topology_data.bones_array.resize(topology_data.vertex_count * 4);
 		topology_data.weights_array.resize(topology_data.vertex_count * 4);
 		for (int vertex_index = 0; vertex_index < topology_data.vertex_count; vertex_index++) {
-			int weight_indices[4] = { -1, -1, -1, -1 };
-			const PackedFloat32Array &vertex_bones_weights = all_vertex_bone_weights[vertex_index];
+			PackedInt32Array vertex_bones_index;
+			vertex_bones_index.resize(highest_bone_index);
+			vertex_bones_index.fill(-1);
+			const Vector<Bone> &vertex_bones_weights = all_vertex_bone_weights[vertex_index];
 
 			for (int weight_index = 0; weight_index <= highest_bone_index; weight_index++) {
-				if (vertex_bones_weights[weight_index] != 0 && (weight_indices[3] == -1 || vertex_bones_weights[weight_index] > vertex_bones_weights[weight_indices[3]])) {
-					weight_indices[3] = weight_index;
+				if (vertex_bones_weights[weight_index].weight != 0 && (vertex_bones_index[highest_bone_index - 1] == -1 || vertex_bones_weights[highest_bone_index - 1].bone_id > vertex_bones_weights[vertex_bones_index[highest_bone_index - 1]].bone_id)) {
+					vertex_bones_index.write[highest_bone_index - 1] = weight_index;
 					//move to right place, highest weight at position 0
-					for (int i = 2; i >= 0; i--) {
-						if (weight_indices[i] == -1 || vertex_bones_weights[weight_index] > vertex_bones_weights[weight_indices[i]]) {
-							//swap
-							weight_indices[i + 1] = weight_indices[i];
-							weight_indices[i] = weight_index;
-						} else {
-							break;
+					for (int i = highest_bone_index - 2; i >= 0; i--) {
+						if (vertex_bones_index[i] == -1 || vertex_bones_weights[weight_index].weight > vertex_bones_weights[vertex_bones_index[i]].weight) {
+							SWAP(vertex_bones_index.write[i + 1], vertex_bones_index.write[i]);
 						}
 					}
 				}
 			}
-
+			int32_t max_bone_weights = 4;
+			vertex_bones_index.resize(max_bone_weights);
 			//save data in bones and weights array
-			for (int result_weight_index = 0; result_weight_index < 4; result_weight_index++) {
-				if (weight_indices[result_weight_index] == -1) { //happens if not 4 bones
-					topology_data.bones_array.write[vertex_index * 4 + result_weight_index] = 0;
-					topology_data.weights_array.write[vertex_index * 4 + result_weight_index] = 0;
-				} else {
-					topology_data.bones_array.write[vertex_index * 4 + result_weight_index] = weight_indices[result_weight_index];
-					topology_data.weights_array.write[vertex_index * 4 + result_weight_index] = vertex_bones_weights[weight_indices[result_weight_index]];
+			for (int result_weight_index = 0; result_weight_index < max_bone_weights; result_weight_index++) {
+				int bone_index = vertex_bones_index[result_weight_index];
+				if (bone_index == -1) {
+					topology_data.bones_array.write[vertex_index * max_bone_weights + result_weight_index] = 0;
+					topology_data.weights_array.write[vertex_index * max_bone_weights + result_weight_index] = 0.0f;
+					continue;
 				}
+				topology_data.bones_array.write[vertex_index * max_bone_weights + result_weight_index] = bone_index;
+				topology_data.weights_array.write[vertex_index * max_bone_weights + result_weight_index] = vertex_bones_weights[bone_index].weight;
 			}
 		}
 	}
