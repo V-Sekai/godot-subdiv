@@ -116,8 +116,9 @@ Far::TopologyRefiner *Subdivider::_create_topology_refiner(const int32_t p_level
 
 	Sdc::SchemeType type = _get_refiner_type();
 	Sdc::Options options;
-	options.SetVtxBoundaryInterpolation(Sdc::Options::VTX_BOUNDARY_EDGE_AND_CORNER);
-	options.SetFVarLinearInterpolation(Sdc::Options::FVAR_LINEAR_CORNERS_PLUS2);
+	options.SetVtxBoundaryInterpolation(Sdc::Options::VTX_BOUNDARY_EDGE_ONLY);
+	options.SetFVarLinearInterpolation(Sdc::Options::FVAR_LINEAR_CORNERS_ONLY);
+	options.SetCreasingMethod(Sdc::Options::CREASE_UNIFORM);
 
 	Far::TopologyRefinerFactory<Descriptor>::Options create_options(type, options);
 
@@ -213,7 +214,7 @@ void Subdivider::_create_subdivision_vertices(Far::TopologyRefiner *refiner, con
 			const Vector<Bone> &vertex_bones_weights = all_vertex_bone_weights[vertex_index];
 
 			for (int weight_index = 0; weight_index <= highest_bone_index; weight_index++) {
-				if (vertex_bones_weights[weight_index].weight != 0 && (vertex_bones_index[highest_bone_index - 1] == -1 || vertex_bones_weights[highest_bone_index - 1].bone_id > vertex_bones_weights[vertex_bones_index[highest_bone_index - 1]].bone_id)) {
+				if (vertex_bones_weights[weight_index].bone_id != 0 && (vertex_bones_index[highest_bone_index - 1] == -1 || vertex_bones_weights[highest_bone_index - 1].bone_id > vertex_bones_weights[vertex_bones_index[highest_bone_index - 1]].bone_id)) {
 					vertex_bones_index.write[highest_bone_index - 1] = weight_index;
 					//move to right place, highest weight at position 0
 					for (int i = highest_bone_index - 2; i >= 0; i--) {
