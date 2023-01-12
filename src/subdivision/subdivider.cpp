@@ -242,7 +242,7 @@ void Subdivider::_create_subdivision_vertices(Far::TopologyRefiner *refiner, con
 			//save data in bones and weights array
 			for (int result_weight_index = 0; result_weight_index < max_bone_weights; result_weight_index++) {
 				int bone_index = vertex_bones_index[result_weight_index];
-				if (bone_index < 0 || bone_index >= vertex_bones_index.size()) {
+				if (bone_index < 0 || bone_index > highest_bone_index) {
 					topology_data.bones_array.write[vertex_index * max_bone_weights + result_weight_index] = 0;
 					topology_data.weights_array.write[vertex_index * max_bone_weights + result_weight_index] = 0.0f;
 					continue;
