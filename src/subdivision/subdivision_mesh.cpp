@@ -81,7 +81,6 @@ void SubdivisionMesh::update_subdivision_vertices(int p_surface, const PackedVec
 	// currently normal generation too slow to actually update
 	Array subdiv_triangle_arrays = _get_subdivided_arrays(v_arrays, p_level, surface_format, false, topology_type);
 
-	const PackedInt32Array &index_array_out = subdiv_triangle_arrays[Mesh::ARRAY_INDEX];
 	const PackedVector3Array &vertex_array_out = subdiv_triangle_arrays[Mesh::ARRAY_VERTEX]; //now that subdivider class used this is the already triangulated array
 
 	// update vertices
