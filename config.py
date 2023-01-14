@@ -8,6 +8,16 @@ def configure(env):
 
 def get_doc_classes():
     return [
+        "TriangleSubdivider",
+        "TopologyDataMesh",
+        "TopologyDataImporter",
+        "SubdivisionServer",
+        "SubdivisionMesh",
+        "SubdivisionBaker",
+        "Subdivider",
+        "QuadSubdivider",
+        "BakedSubdivMesh",
+        "QuadSubdivider",
     ]
 
 

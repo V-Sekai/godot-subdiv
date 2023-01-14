@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="SubdivisionBaker" inherits="RefCounted" version="4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../doc/class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="get_baked_arrays">
+			<return type="Array" />
+			<param index="0" name="topology_arrays" type="Array" />
+			<param index="1" name="subdivision_level" type="int" />
+			<param index="2" name="format" type="int" />
+			<param index="3" name="topology_type" type="int" enum="TopologyDataMesh.TopologyType" />
+			<description>
+			</description>
+		</method>
+		<method name="get_importer_mesh">
+			<return type="ImporterMesh" />
+			<param index="0" name="base" type="ImporterMesh" />
+			<param index="1" name="topology_data_mesh" type="TopologyDataMesh" />
+			<param index="2" name="subdivision_level" type="int" />
+			<param index="3" name="_unnamed_arg3" type="bool" />
+			<description>
+			</description>
+		</method>
+	</methods>
+</class>
