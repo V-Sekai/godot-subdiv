@@ -300,7 +300,6 @@ OpenSubdiv::Sdc::SchemeType Subdivider::_get_refiner_type() const {
 void Subdivider::_create_subdivision_faces(OpenSubdiv::Far::TopologyRefiner *refiner,
 		const int32_t p_level, int32_t p_format) {
 	const bool use_uv = p_format & Mesh::ARRAY_FORMAT_TEX_UV;
-	const bool use_bones = (p_format & Mesh::ARRAY_FORMAT_BONES) && (p_format & Mesh::ARRAY_FORMAT_WEIGHTS);
 
 	PackedInt32Array index_array;
 	PackedInt32Array uv_index_array;
