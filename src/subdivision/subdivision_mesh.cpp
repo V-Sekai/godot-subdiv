@@ -1,7 +1,7 @@
 #include "subdivision_mesh.hpp"
 
-#include "scene/3d/mesh_instance_3d.h"
 #include "core/object/class_db.h"
+#include "scene/3d/mesh_instance_3d.h"
 
 #include "scene/resources/surface_tool.h"
 
@@ -91,12 +91,11 @@ void SubdivisionMesh::update_subdivision_vertices(int p_surface, const PackedVec
 
 	uint32_t vertex_stride = sizeof(float) * 3; //vector3 size
 
-	if (vertex_buffer.size() / vertex_stride != vertex_array_out.size() && vertex_buffer.size() % vertex_array_out.size() == 0) {
+	if (vertex_buffer.size() / (int64_t)vertex_stride != vertex_array_out.size() && vertex_buffer.size() % vertex_array_out.size() == 0) {
 		vertex_stride = vertex_buffer.size() / vertex_array_out.size(); //if not already equal likely also contains normals and/or tangents
 		//if the division has a remainder data corrupted, will then autofail in condition below
 	}
-
-	ERR_FAIL_COND(vertex_buffer.size() / vertex_stride != vertex_array_out.size());
+	ERR_FAIL_COND(vertex_buffer.size() / (int64_t)vertex_stride != vertex_array_out.size());
 
 	for (int vertex_index = 0; vertex_index < vertex_array_out.size(); vertex_index++) {
 		memcpy(&vertex_write_buffer[vertex_index * vertex_stride], &vertex_array_out[vertex_index], sizeof(float) * 3);
