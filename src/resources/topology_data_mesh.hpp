@@ -105,4 +105,5 @@ public:
 };
 
 VARIANT_ENUM_CAST(TopologyDataMesh::TopologyType);
+VARIANT_ENUM_CAST(TopologyDataMesh::ArrayType);
 #endif
