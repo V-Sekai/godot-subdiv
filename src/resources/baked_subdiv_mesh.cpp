@@ -42,7 +42,7 @@ void BakedSubdivMesh::_update_subdiv() {
 		for (int surface_index = 0; surface_index < data_mesh->get_surface_count(); surface_index++) {
 			const Array &source_arrays = data_mesh->surface_get_arrays(surface_index);
 			int64_t p_format = data_mesh->surface_get_format(surface_index);
-			TopologyDataMesh::TopologyType topology_type = data_mesh->surface_get_topology_type(surface_index);
+			TopologyDataMesh::TopologyType topology_type = TopologyDataMesh::TopologyType(data_mesh->surface_get_topology_type(surface_index));
 			const Array &triangle_arrays = baker->get_baked_arrays(source_arrays,
 					subdiv_level, p_format, topology_type);
 

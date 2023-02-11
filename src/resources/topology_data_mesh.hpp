@@ -78,7 +78,7 @@ public:
 	Array surface_get_arrays(int p_surface) const;
 
 	void add_surface(const Array &p_arrays, const Array &p_blend_shapes,
-			const Ref<Material> &p_material, const String &p_name, int32_t p_format, TopologyType p_topology_type);
+			const Ref<Material> &p_material, const String &p_name, int32_t p_format, int32_t p_topology_type);
 	String surface_get_name(int p_surface) const;
 	void surface_set_name(int p_surface, const String &p_name);
 	void surface_set_current_vertex_array(int p_surface, const PackedVector3Array &p_vertex_array);
@@ -88,8 +88,8 @@ public:
 	int64_t surface_get_format(int64_t index) const;
 	void surface_set_material(int64_t index, const Ref<Material> &material);
 	Ref<Material> surface_get_material(int64_t index) const;
-	void surface_set_topology_type(int64_t index, TopologyType p_topology_type);
-	TopologyType surface_get_topology_type(int64_t index) const;
+	void surface_set_topology_type(int64_t index, int32_t p_topology_type);
+	int32_t surface_get_topology_type(int64_t index) const;
 
 	int64_t get_blend_shape_count() const;
 	Array surface_get_blend_shape_arrays(int64_t surface_index) const;

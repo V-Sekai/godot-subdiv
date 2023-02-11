@@ -53,7 +53,7 @@ void SubdivisionMesh::_update_subdivision(Ref<TopologyDataMesh> p_mesh, int32_t 
 		Array v_arrays = cached_data_arrays.size() ? cached_data_arrays[surface_index]
 												   : p_mesh->surface_get_arrays(surface_index);
 
-		Array subdiv_triangle_arrays = _get_subdivided_arrays(v_arrays, p_level, surface_format, true, p_mesh->surface_get_topology_type(surface_index));
+		Array subdiv_triangle_arrays = _get_subdivided_arrays(v_arrays, p_level, surface_format, true, TopologyDataMesh::TopologyType(p_mesh->surface_get_topology_type(surface_index)));
 
 		rendering_server->mesh_add_surface_from_arrays(subdiv_mesh, RenderingServer::PRIMITIVE_TRIANGLES, subdiv_triangle_arrays, Array(), Dictionary(), surface_format);
 

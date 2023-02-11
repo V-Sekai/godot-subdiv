@@ -71,7 +71,7 @@ Ref<ImporterMesh> SubdivisionBaker::get_importer_mesh(const Ref<ImporterMesh> &p
 	for (int surface_index = 0; surface_index < p_topology_data_mesh->get_surface_count(); surface_index++) {
 		const Array &source_arrays = p_topology_data_mesh->surface_get_arrays(surface_index);
 		int64_t p_format = p_topology_data_mesh->surface_get_format(surface_index);
-		TopologyDataMesh::TopologyType topology_type = p_topology_data_mesh->surface_get_topology_type(surface_index);
+		TopologyDataMesh::TopologyType topology_type = TopologyDataMesh::TopologyType(p_topology_data_mesh->surface_get_topology_type(surface_index));
 		const String &surface_name = p_topology_data_mesh->surface_get_name(surface_index);
 		const Ref<Material> &surface_material = p_topology_data_mesh->surface_get_material(surface_index);
 

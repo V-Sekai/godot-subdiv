@@ -7,14 +7,14 @@
 #include "../subdivision/subdivision_server.hpp"
 
 void TopologyDataMesh::add_surface(const Array &p_arrays, const Array &p_blend_shapes, const Ref<Material> &p_material,
-		const String &p_name, int32_t p_format, TopologyType p_topology_type) {
+		const String &p_name, int32_t p_format, int32_t p_topology_type) {
 	ERR_FAIL_COND(p_arrays.size() != TopologyDataMesh::ARRAY_MAX);
 	Surface s;
 	s.arrays = p_arrays;
 	s.name = p_name;
 	s.material = p_material;
 	s.format = p_format;
-	s.topology_type = p_topology_type;
+	s.topology_type = TopologyDataMesh::TopologyType(p_topology_type);
 	PackedVector3Array vertex_array = p_arrays[TopologyDataMesh::ARRAY_VERTEX];
 	int vertex_count = vertex_array.size();
 	ERR_FAIL_COND(vertex_count == 0);
@@ -126,12 +126,12 @@ Ref<Material> TopologyDataMesh::surface_get_material(int64_t index) const {
 	return surfaces[index].material;
 }
 
-void TopologyDataMesh::surface_set_topology_type(int64_t index, TopologyType p_topology_type) {
+void TopologyDataMesh::surface_set_topology_type(int64_t index, int32_t p_topology_type) {
 	ERR_FAIL_INDEX(index, surfaces.size());
-	surfaces.write[index].topology_type = p_topology_type;
+	surfaces.write[index].topology_type = TopologyDataMesh::TopologyType(p_topology_type);
 }
 
-TopologyDataMesh::TopologyType TopologyDataMesh::surface_get_topology_type(int64_t index) const {
+int32_t TopologyDataMesh::surface_get_topology_type(int64_t index) const {
 	ERR_FAIL_INDEX_V(index, surfaces.size(), TopologyType::QUAD);
 	return surfaces[index].topology_type;
 }
