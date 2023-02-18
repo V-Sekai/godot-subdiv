@@ -40,7 +40,6 @@ TEST_CASE("compare with subdivided") {
 	CHECK(normal_array.size() == vertex_array.size());
 	Ref<TopologyDataMesh> expected = core_bind::ResourceLoader::get_singleton()->load("res://test/cube_subdiv_1.tres");
 	Array expected_arr = expected->surface_get_arrays(0);
-	const PackedVector3Array &expected_vertex_array = expected_arr[TopologyDataMesh::ARRAY_VERTEX];
 	const PackedInt32Array &expected_index_array = expected_arr[TopologyDataMesh::ARRAY_INDEX];
 
 	CHECK(expected_index_array.size() == index_array.size());
