@@ -54,7 +54,7 @@ bool GodotSubdivImporter::get_option_visibility(const String &p_path, const Stri
 }
 
 void GodotSubdivImporter::get_import_options(const String &p_path, List<ImportOption> *r_options, int p_preset) const {
-	ImportOption option(PropertyInfo(Variant::INT, "import_as", PROPERTY_HINT_ENUM, "BakedSubdivMesh (bake at runtime)"), "BakedSubdivMesh (bake at runtime)");
+	ImportOption option(PropertyInfo(Variant::INT, "import_as", PROPERTY_HINT_ENUM, "BakedSubdivMesh (bake at runtime),ImporterMesh (bake at import)"), "ImporterMesh (bake at import)");
 	r_options->push_back(option);
 	ImportOption option_2(PropertyInfo(Variant::INT, "subdivision_level", PROPERTY_HINT_RANGE, "0,6"), 0);
 	r_options->push_back(option_2);
@@ -64,7 +64,6 @@ Error GodotSubdivImporter::import(const String &p_source_file, const String &p_s
 	Ref<GLTFDocument> gltf = memnew(GLTFDocument);
 	Ref<GLTFState> gltf_state = memnew(GLTFState);
 	gltf->append_from_file(p_source_file, gltf_state, 0);
-    
 	Node *node = gltf->generate_scene(gltf_state);
 
 	node->set_name(p_source_file.get_file().get_basename());

@@ -3,8 +3,7 @@
 #include "core/object/ref_counted.h"
 
 #include "scene/3d/importer_mesh_instance_3d.h"
-
-#include "../src/import/topology_data_importer.hpp"
+#include "src/import/topology_data_importer.hpp"
 
 class SubdivConverter : public RefCounted {
 	GDCLASS(SubdivConverter, RefCounted);
