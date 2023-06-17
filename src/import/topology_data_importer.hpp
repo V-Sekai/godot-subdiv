@@ -1,23 +1,24 @@
 #ifndef TOPOLOGY_DATA_IMPORTER_H
 #define TOPOLOGY_DATA_IMPORTER_H
 
-#include "scene/resources/mesh.h"
 #include "core/object/object.h"
 #include "core/templates/hash_map.h"
+#include "scene/3d/importer_mesh_instance_3d.h"
+#include "scene/3d/mesh_instance_3d.h"
+#include "scene/resources/mesh.h"
 
 #include "../resources/topology_data_mesh.hpp"
 
-class TopologyDataImporter : public Object {
-	GDCLASS(TopologyDataImporter, Object);
+class TopologyDataImporter : public RefCounted {
+	GDCLASS(TopologyDataImporter, RefCounted);
 
 protected:
-	static void
-	_bind_methods();
+	static void _bind_methods();
 
 public:
 	enum ImportMode {
-		BAKED_SUBDIV_MESH = 1,
-		IMPORTER_MESH = 3
+		BAKED_SUBDIV_MESH = 0,
+		IMPORTER_MESH,
 	};
 
 private:
@@ -49,12 +50,13 @@ private:
 	TopologyDataMesh::TopologyType _generate_topology_surface_arrays(const SurfaceVertexArrays &surface, int32_t format, Array &surface_arrays);
 
 	int32_t generate_fake_format(const Array &arrays) const;
-	Object *_replace_importer_mesh_instance_with_mesh_instance(Object *importer_mesh_instance_object);
+	MeshInstance3D *_replace_importer_mesh_instance_with_mesh_instance(ImporterMeshInstance3D * importer_mesh_instance);
 
 public:
 	TopologyDataImporter();
 	~TopologyDataImporter();
-	void convert_importer_meshinstance_to_subdiv(Object *p_meshinstance, ImportMode import_mode, int32_t subdiv_level);
+
+	void convert_importer_meshinstance_to_subdiv(ImporterMeshInstance3D *importer_mesh_instance, ImportMode import_mode, int32_t subdiv_level);
 };
 
 VARIANT_ENUM_CAST(TopologyDataImporter::ImportMode);

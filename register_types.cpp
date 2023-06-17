@@ -1,6 +1,8 @@
 #include "register_types.h"
 
 #include "core/object/class_db.h"
+#include "editor/import/editor_import_plugin.h"
+#include "editor/subdiv_plugin.h"
 
 #include "src/import/topology_data_importer.hpp"
 #include "src/resources/baked_subdiv_mesh.hpp"
@@ -13,13 +15,30 @@
 #include "src/subdivision/subdivider.hpp"
 #include "src/subdivision/triangle_subdivider.hpp"
 
-#ifdef TESTS_ENABLED
-#include "subdiv_test.hpp"
+#ifdef TOOLS_ENABLED
+#include "editor/editor_node.h"
+#include "editor/import/resource_importer_scene.h"
+
 #endif
 
 static SubdivisionServer *_subdivision_server;
 
+#ifdef TESTS_ENABLED
+#include "subdiv_test.hpp"
+#endif
+
 void initialize_subdiv_module(ModuleInitializationLevel p_level) {
+#ifdef TOOLS_ENABLED
+	if (p_level == MODULE_INITIALIZATION_LEVEL_EDITOR) {
+		ClassDB::APIType prev_api = ClassDB::get_current_api();
+		ClassDB::set_current_api(ClassDB::API_EDITOR);
+		EditorPlugins::add_by_type<SubdivEditorPlugin>();
+
+		ClassDB::set_current_api(prev_api);
+		return;
+	}
+#endif
+
 	if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
 		return;
 	}

@@ -36,8 +36,7 @@ TopologyDataImporter::SurfaceVertexArrays::SurfaceVertexArrays(const Array &p_me
 	weights_array = p_mesh_arrays[Mesh::ARRAY_WEIGHTS];
 }
 
-void TopologyDataImporter::convert_importer_meshinstance_to_subdiv(Object *importer_mesh_instance_object, ImportMode import_mode, int32_t subdiv_level) {
-	ImporterMeshInstance3D *importer_mesh_instance = Object::cast_to<ImporterMeshInstance3D>(importer_mesh_instance_object);
+void TopologyDataImporter::convert_importer_meshinstance_to_subdiv(ImporterMeshInstance3D* importer_mesh_instance, ImportMode import_mode, int32_t subdiv_level) {
 	Ref<ImporterMesh> importer_mesh = importer_mesh_instance->get_mesh();
 	ERR_FAIL_COND_MSG(importer_mesh.is_null(), "Mesh is null");
 
@@ -356,9 +355,7 @@ int32_t TopologyDataImporter::generate_fake_format(const Array &arrays) const {
 	return format;
 }
 
-//need to cast back to MeshInstance after. Actually changes scene and switches importer meshinstance to meshinstance
-Object *TopologyDataImporter::_replace_importer_mesh_instance_with_mesh_instance(Object *importer_mesh_instance_object) {
-	ImporterMeshInstance3D *importer_mesh_instance = Object::cast_to<ImporterMeshInstance3D>(importer_mesh_instance_object);
+MeshInstance3D *TopologyDataImporter::_replace_importer_mesh_instance_with_mesh_instance(ImporterMeshInstance3D * importer_mesh_instance) {
 	MeshInstance3D *mesh_instance = memnew(MeshInstance3D);
 	Ref<ArrayMesh> array_mesh;
 	array_mesh.instantiate();
@@ -373,6 +370,5 @@ Object *TopologyDataImporter::_replace_importer_mesh_instance_with_mesh_instance
 	mesh_instance->set_mesh(array_mesh);
 	importer_mesh_instance->replace_by(mesh_instance, false);
 	mesh_instance->set_name(mesh_instance_name);
-	memdelete(importer_mesh_instance);
 	return mesh_instance;
 }
