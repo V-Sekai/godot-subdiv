@@ -13,6 +13,10 @@ After installing the addon and enabling it in the settings, you can select the c
 
 There you will see one option.
 
+SubdivMeshInstance3D
+
+Doesn't bake. Skinning and blend shape changes get processed by CPU and then directly thrown at the RenderingServer. This is useful if you have a changing mesh or changing subdivision level.
+
 Adjust the subdivision level, click reimport and you should see your mesh subdivided.
 
 ### Modeling Tips
