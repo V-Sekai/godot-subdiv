@@ -1,5 +1,3 @@
-#pragma once
-
 #include "core/object/object.h"
 #include "core/variant/variant.h"
 #include "editor/import/editor_import_plugin.h"
