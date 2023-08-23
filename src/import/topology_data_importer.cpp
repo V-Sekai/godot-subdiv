@@ -99,7 +99,6 @@ void TopologyDataImporter::convert_importer_meshinstance_to_subdiv(ImporterMeshI
 
 			MeshInstance3D *mesh_instance = Object::cast_to<MeshInstance3D>(_replace_importer_mesh_instance_with_mesh_instance(importer_mesh_instance));
 
-			// replace importermeshinstance in scene
 			importer_mesh_instance->replace_by(mesh_instance, false);
 			mesh_instance->set_name(mesh_instance_name);
 			mesh_instance->set_mesh(subdiv_mesh);
@@ -113,6 +112,12 @@ void TopologyDataImporter::convert_importer_meshinstance_to_subdiv(ImporterMeshI
 			baker.instantiate();
 			subdiv_importer_mesh = baker->get_importer_mesh(subdiv_importer_mesh, topology_data_mesh, subdiv_level, true);
 			importer_mesh_instance->set_mesh(subdiv_importer_mesh);
+
+			MeshInstance3D *mesh_instance = Object::cast_to<MeshInstance3D>(_replace_importer_mesh_instance_with_mesh_instance(importer_mesh_instance));
+
+			importer_mesh_instance->replace_by(mesh_instance, false);
+			mesh_instance->set_name(mesh_instance_name);
+			mesh_instance->set_mesh(subdiv_importer_mesh->get_mesh());
 			break;
 		}
 		default:
