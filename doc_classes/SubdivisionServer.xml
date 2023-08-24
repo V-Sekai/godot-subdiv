@@ -22,10 +22,5 @@
 			<description>
 			</description>
 		</method>
-		<method name="get_singleton" qualifiers="static">
-			<return type="SubdivisionServer" />
-			<description>
-			</description>
-		</method>
 	</methods>
 </class>
