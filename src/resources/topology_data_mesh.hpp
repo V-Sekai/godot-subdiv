@@ -33,8 +33,6 @@ public:
 		TRIANGLE = 0,
 		QUAD = 1
 	};
-
-protected:
 	struct Surface {
 		Array arrays;
 		Array blend_shape_data; //Array[Array][PackedVector3Array]
@@ -45,6 +43,8 @@ protected:
 		int32_t format;
 		TopologyType topology_type;
 	};
+
+protected:
 	Vector<Surface> surfaces;
 	Array blend_shapes; //is Vector<StringName>, but that caused casting issues
 
