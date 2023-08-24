@@ -79,9 +79,9 @@ void TopologyDataMesh::_set_data(const Dictionary &p_data) {
 			ERR_CONTINUE(!s.has("arrays"));
 			Array arr = s["arrays"];
 			int32_t format = s["format"];
-			String name;
+			String topology_data_mesh_name;
 			if (s.has("name")) {
-				name = s["name"];
+				topology_data_mesh_name = s["name"];
 			}
 			Array b_shapes;
 			if (s.has("blend_shapes")) {
@@ -95,7 +95,7 @@ void TopologyDataMesh::_set_data(const Dictionary &p_data) {
 			if (s.has("topology_type")) {
 				topology_type_num = s["topology_type"];
 			}
-			add_surface(arr, b_shapes, material, name, format, topology_type_num);
+			add_surface(arr, b_shapes, material, topology_data_mesh_name, format, topology_type_num);
 		}
 	}
 }
