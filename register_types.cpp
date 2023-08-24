@@ -46,8 +46,8 @@
 
 #ifdef TOOLS_ENABLED
 #include "editor/editor_node.h"
-#include "editor/import/resource_importer_scene.h"
 #include "editor/import/editor_import_plugin.h"
+#include "editor/import/resource_importer_scene.h"
 #endif
 
 static SubdivisionServer *_subdivision_server;
