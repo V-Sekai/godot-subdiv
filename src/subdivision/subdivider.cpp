@@ -30,6 +30,7 @@
 
 #include "subdivider.hpp"
 
+#include "core/error/error_macros.h"
 #include "core/templates/hash_set.h"
 #include "scene/resources/mesh_data_tool.h"
 #include "servers/rendering_server.h"
@@ -40,6 +41,7 @@ using namespace OpenSubdiv;
 typedef Far::TopologyDescriptor Descriptor;
 
 Subdivider::TopologyData::TopologyData(const Array &p_mesh_arrays, int32_t p_format, int32_t p_face_verts) {
+	ERR_FAIL_INDEX(p_mesh_arrays.size(), int(TopologyDataMesh::ARRAY_MAX));
 	vertex_array = p_mesh_arrays[TopologyDataMesh::ARRAY_VERTEX];
 	index_array = p_mesh_arrays[TopologyDataMesh::ARRAY_INDEX];
 	if (p_format & Mesh::ARRAY_FORMAT_TEX_UV) {
