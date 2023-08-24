@@ -9,11 +9,7 @@ TEST_CASE("Simple bake") {
 	Ref<SubdivisionBaker> baker;
 	baker.instantiate();
 	Ref<TopologyDataMesh> source_mesh = core_bind::ResourceLoader::get_singleton()->load("res://test/skinning_test.tres");
-	Ref<ImporterMesh> importer_mesh;
-	importer_mesh.instantiate();
-	importer_mesh = baker->get_importer_mesh(importer_mesh, source_mesh, 2);
-
-	Array result_arrays = importer_mesh->get_surface_arrays(0);
+	Array result_arrays = source_mesh->_(0);
 	CHECK(!result_arrays.is_empty());
 	const PackedVector3Array &vertex_array = result_arrays[Mesh::ARRAY_VERTEX];
 	int32_t vertex_amount = vertex_array.size();
