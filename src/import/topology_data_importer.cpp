@@ -36,7 +36,7 @@ TopologyDataImporter::SurfaceVertexArrays::SurfaceVertexArrays(const Array &p_me
 	weights_array = p_mesh_arrays[Mesh::ARRAY_WEIGHTS];
 }
 
-void TopologyDataImporter::convert_importer_meshinstance_to_subdiv(ImporterMeshInstance3D* importer_mesh_instance, ImportMode import_mode, int32_t subdiv_level) {
+void TopologyDataImporter::convert_importer_meshinstance_to_subdiv(ImporterMeshInstance3D *importer_mesh_instance, ImportMode import_mode, int32_t subdiv_level) {
 	Ref<ImporterMesh> importer_mesh = importer_mesh_instance->get_mesh();
 	ERR_FAIL_COND_MSG(importer_mesh.is_null(), "Mesh is null");
 
@@ -107,14 +107,12 @@ void TopologyDataImporter::convert_importer_meshinstance_to_subdiv(ImporterMeshI
 		case ImportMode::IMPORTER_MESH: {
 			Ref<ImporterMesh> subdiv_importer_mesh;
 			subdiv_importer_mesh.instantiate();
-
 			Ref<SubdivisionBaker> baker;
 			baker.instantiate();
 			subdiv_importer_mesh = baker->get_importer_mesh(subdiv_importer_mesh, topology_data_mesh, subdiv_level, true);
+			subdiv_importer_mesh->generate_lods(Math::deg_to_rad(60.0f), Math::deg_to_rad(25.0f), Array());
 			importer_mesh_instance->set_mesh(subdiv_importer_mesh);
-
 			MeshInstance3D *mesh_instance = Object::cast_to<MeshInstance3D>(_replace_importer_mesh_instance_with_mesh_instance(importer_mesh_instance));
-
 			importer_mesh_instance->replace_by(mesh_instance, false);
 			mesh_instance->set_name(mesh_instance_name);
 			mesh_instance->set_mesh(subdiv_importer_mesh->get_mesh());
@@ -360,7 +358,7 @@ int32_t TopologyDataImporter::generate_fake_format(const Array &arrays) const {
 	return format;
 }
 
-MeshInstance3D *TopologyDataImporter::_replace_importer_mesh_instance_with_mesh_instance(ImporterMeshInstance3D * importer_mesh_instance) {
+MeshInstance3D *TopologyDataImporter::_replace_importer_mesh_instance_with_mesh_instance(ImporterMeshInstance3D *importer_mesh_instance) {
 	MeshInstance3D *mesh_instance = memnew(MeshInstance3D);
 	Ref<ArrayMesh> array_mesh;
 	array_mesh.instantiate();
