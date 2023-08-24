@@ -31,7 +31,6 @@
 #include "register_types.h"
 
 #include "core/object/class_db.h"
-#include "editor/subdiv_plugin.h"
 
 #include "src/import/topology_data_importer.hpp"
 #include "src/resources/baked_subdiv_mesh.hpp"
@@ -48,6 +47,7 @@
 #include "editor/editor_node.h"
 #include "editor/import/editor_import_plugin.h"
 #include "editor/import/resource_importer_scene.h"
+#include "editor/subdiv_plugin.h"
 #endif
 
 static SubdivisionServer *_subdivision_server;
