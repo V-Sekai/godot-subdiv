@@ -29,9 +29,9 @@ public:
 		ARRAY_MAX = Mesh::ARRAY_MAX + 1
 	};
 
-	enum TopologyType {
-		TRIANGLE = 0,
-		QUAD = 1
+	enum {
+		TOPOLOGY_DATA_MESH_TRIANGLE = 0,
+		TOPOLOGY_DATA_MESH_QUAD = 1
 	};
 	struct Surface {
 		Array arrays;
@@ -41,7 +41,7 @@ public:
 		int32_t flags = 0;
 		AABB aabb;
 		int32_t format;
-		TopologyType topology_type;
+		int topology_type;
 	};
 
 protected:
@@ -104,6 +104,5 @@ public:
 	~TopologyDataMesh();
 };
 
-VARIANT_ENUM_CAST(TopologyDataMesh::TopologyType);
 VARIANT_ENUM_CAST(TopologyDataMesh::ArrayType);
 #endif

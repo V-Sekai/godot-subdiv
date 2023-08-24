@@ -66,7 +66,7 @@ void TopologyDataImporter::convert_importer_meshinstance_to_subdiv(ImporterMeshI
 		}
 
 		Array surface_arrays;
-		TopologyDataMesh::TopologyType topology_type = _generate_topology_surface_arrays(SurfaceVertexArrays(p_arrays), format, surface_arrays);
+		int topology_type = _generate_topology_surface_arrays(SurfaceVertexArrays(p_arrays), format, surface_arrays);
 
 		//convert all blend shapes in the exact same way (BlendShapeArrays are also just an Array with the size of ARRAY_MAX and data offsets)
 		Array blend_shape_arrays;
@@ -124,8 +124,8 @@ void TopologyDataImporter::convert_importer_meshinstance_to_subdiv(ImporterMeshI
 	}
 }
 
-TopologyDataMesh::TopologyType TopologyDataImporter::_generate_topology_surface_arrays(const SurfaceVertexArrays &surface, int32_t format, Array &surface_arrays) {
-	ERR_FAIL_COND_V(!(format & Mesh::ARRAY_FORMAT_INDEX), TopologyDataMesh::TopologyType::QUAD);
+int TopologyDataImporter::_generate_topology_surface_arrays(const SurfaceVertexArrays &surface, int32_t format, Array &surface_arrays) {
+	ERR_FAIL_COND_V(!(format & Mesh::ARRAY_FORMAT_INDEX), TopologyDataMesh::TOPOLOGY_DATA_MESH_QUAD);
 	TopologySurfaceData topology_surface = _remove_duplicate_vertices(surface, format);
 	bool is_quad = _merge_to_quads(topology_surface.index_array, topology_surface.uv_array, format);
 	bool has_uv = format & Mesh::ARRAY_FORMAT_TEX_UV;
@@ -147,9 +147,9 @@ TopologyDataMesh::TopologyType TopologyDataImporter::_generate_topology_surface_
 	}
 
 	if (is_quad) {
-		return TopologyDataMesh::TopologyType::QUAD;
+		return TopologyDataMesh::TOPOLOGY_DATA_MESH_QUAD;
 	} else {
-		return TopologyDataMesh::TopologyType::TRIANGLE;
+		return TopologyDataMesh::TOPOLOGY_DATA_MESH_TRIANGLE;
 	}
 }
 

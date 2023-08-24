@@ -47,7 +47,7 @@ private:
 			const PackedInt32Array &mesh_index_array, const PackedVector3Array &mesh_vertex_array);
 	bool _merge_to_quads(PackedInt32Array &index_array, PackedVector2Array &uv_array, int32_t format);
 	PackedInt32Array _generate_uv_index_array(PackedVector2Array &uv_array);
-	TopologyDataMesh::TopologyType _generate_topology_surface_arrays(const SurfaceVertexArrays &surface, int32_t format, Array &surface_arrays);
+	int _generate_topology_surface_arrays(const SurfaceVertexArrays &surface, int32_t format, Array &surface_arrays);
 
 	int32_t generate_fake_format(const Array &arrays) const;
 	MeshInstance3D *_replace_importer_mesh_instance_with_mesh_instance(ImporterMeshInstance3D * importer_mesh_instance);

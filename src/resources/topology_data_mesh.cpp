@@ -1,7 +1,8 @@
 #include "topology_data_mesh.hpp"
 
-#include "servers/rendering_server.h"
+#include "core/object/class_db.h"
 #include "scene/resources/surface_tool.h"
+#include "servers/rendering_server.h"
 
 #include "../subdivision/subdivision_mesh.hpp"
 #include "../subdivision/subdivision_server.hpp"
@@ -14,7 +15,7 @@ void TopologyDataMesh::add_surface(const Array &p_arrays, const Array &p_blend_s
 	s.name = p_name;
 	s.material = p_material;
 	s.format = p_format;
-	s.topology_type = TopologyDataMesh::TopologyType(p_topology_type);
+	s.topology_type = p_topology_type;
 	PackedVector3Array vertex_array = p_arrays[TopologyDataMesh::ARRAY_VERTEX];
 	int vertex_count = vertex_array.size();
 	ERR_FAIL_COND(vertex_count == 0);
@@ -64,9 +65,7 @@ void TopologyDataMesh::_set_data(const Dictionary &p_data) {
 			if (s.has("topology_type")) {
 				topology_type_num = s["topology_type"];
 			}
-			TopologyType topology_type = static_cast<TopologyType>(topology_type_num);
-
-			add_surface(arr, b_shapes, material, name, format, topology_type);
+			add_surface(arr, b_shapes, material, name, format, topology_type_num);
 		}
 	}
 }
@@ -128,11 +127,11 @@ Ref<Material> TopologyDataMesh::surface_get_material(int64_t index) const {
 
 void TopologyDataMesh::surface_set_topology_type(int64_t index, int32_t p_topology_type) {
 	ERR_FAIL_INDEX(index, surfaces.size());
-	surfaces.write[index].topology_type = TopologyDataMesh::TopologyType(p_topology_type);
+	surfaces.write[index].topology_type = p_topology_type;
 }
 
 int32_t TopologyDataMesh::surface_get_topology_type(int64_t index) const {
-	ERR_FAIL_INDEX_V(index, surfaces.size(), TopologyType::QUAD);
+	ERR_FAIL_INDEX_V(index, surfaces.size(), TopologyDataMesh::TOPOLOGY_DATA_MESH_QUAD);
 	return surfaces[index].topology_type;
 }
 
@@ -195,4 +194,6 @@ void TopologyDataMesh::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("_get_data"), &TopologyDataMesh::_get_data);
 
 	ADD_PROPERTY(PropertyInfo(Variant::DICTIONARY, "_data", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_NO_EDITOR), "_set_data", "_get_data");
+	BIND_CONSTANT(TOPOLOGY_DATA_MESH_QUAD);
+	BIND_CONSTANT(TOPOLOGY_DATA_MESH_TRIANGLE);
 }

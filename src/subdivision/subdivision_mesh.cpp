@@ -11,15 +11,15 @@
 #include "quad_subdivider.hpp"
 #include "triangle_subdivider.hpp"
 
-Array SubdivisionMesh::_get_subdivided_arrays(const Array &p_arrays, int p_level, int32_t p_format, bool calculate_normals, TopologyDataMesh::TopologyType topology_type) {
+Array SubdivisionMesh::_get_subdivided_arrays(const Array &p_arrays, int p_level, int32_t p_format, bool calculate_normals, int topology_type) {
 	switch (topology_type) {
-		case TopologyDataMesh::QUAD: {
+		case TopologyDataMesh::TOPOLOGY_DATA_MESH_QUAD: {
 			Ref<QuadSubdivider> subdivider;
 			subdivider.instantiate();
 			return subdivider->get_subdivided_arrays(p_arrays, p_level, p_format, calculate_normals);
 		}
 
-		case TopologyDataMesh::TRIANGLE: {
+		case TopologyDataMesh::TOPOLOGY_DATA_MESH_TRIANGLE: {
 			Ref<TriangleSubdivider> subdivider;
 			subdivider.instantiate();
 			return subdivider->get_subdivided_arrays(p_arrays, p_level, p_format, calculate_normals);
@@ -53,7 +53,7 @@ void SubdivisionMesh::_update_subdivision(Ref<TopologyDataMesh> p_mesh, int32_t 
 		Array v_arrays = cached_data_arrays.size() ? cached_data_arrays[surface_index]
 												   : p_mesh->surface_get_arrays(surface_index);
 
-		Array subdiv_triangle_arrays = _get_subdivided_arrays(v_arrays, p_level, surface_format, true, TopologyDataMesh::TopologyType(p_mesh->surface_get_topology_type(surface_index)));
+		Array subdiv_triangle_arrays = _get_subdivided_arrays(v_arrays, p_level, surface_format, true, p_mesh->surface_get_topology_type(surface_index));
 
 		rendering_server->mesh_add_surface_from_arrays(subdiv_mesh, RenderingServer::PRIMITIVE_TRIANGLES, subdiv_triangle_arrays, Array(), Dictionary(), surface_format);
 
@@ -64,7 +64,7 @@ void SubdivisionMesh::_update_subdivision(Ref<TopologyDataMesh> p_mesh, int32_t 
 }
 
 void SubdivisionMesh::update_subdivision_vertices(int p_surface, const PackedVector3Array &new_vertex_array,
-		const PackedInt32Array &index_array, TopologyDataMesh::TopologyType topology_type) {
+		const PackedInt32Array &index_array, int topology_type) {
 	int p_level = current_level;
 	ERR_FAIL_COND(p_level < 0);
 

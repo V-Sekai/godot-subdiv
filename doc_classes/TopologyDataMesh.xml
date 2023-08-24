@@ -23,4 +23,10 @@
 		<member name="_data" type="Dictionary" setter="_set_data" getter="_get_data" default="{ &quot;surfaces&quot;: [] }">
 		</member>
 	</members>
+	<constants>
+		<constant name="TOPOLOGY_DATA_MESH_QUAD" value="1">
+		</constant>
+		<constant name="TOPOLOGY_DATA_MESH_TRIANGLE" value="0">
+		</constant>
+	</constants>
 </class>
