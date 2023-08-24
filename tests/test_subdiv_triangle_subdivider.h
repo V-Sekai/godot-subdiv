@@ -28,7 +28,8 @@
 /* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                 */
 /**************************************************************************/
 
-#pragma once
+#ifndef TEST_SUBDIV_TRIANGLE_SUBDIVIDER_H
+#define TEST_SUBDIV_TRIANGLE_SUBDIVIDER_H
 
 #include "tests/test_macros.h"
 
@@ -63,3 +64,5 @@ TEST_CASE("subdivide once") {
 	CHECK(result_vertex_array.size() != 0);
 	CHECK(result_index_array.size() % 3 == 0);
 }
+
+#endif

@@ -28,7 +28,8 @@
 /* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                 */
 /**************************************************************************/
 
-#pragma once
+#ifndef TEST_SUBDIV_SUBDIVISION_BAKER_H
+#define TEST_SUBDIV_SUBDIVISION_BAKER_H
 
 #include "../src/subdivision/subdivision_baker.hpp"
 #include "core/io/resource_loader.h"
@@ -49,3 +50,5 @@ TEST_CASE("Simple bake") {
 	const Vector<real_t> &weights_array = result_arrays[Mesh::ARRAY_WEIGHTS];
 	CHECK_EQ(bones_array.size(), weights_array.size());
 }
+
+#endif // TEST_SUBDIV_SUBDIVISION_BAKER_H

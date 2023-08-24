@@ -28,7 +28,8 @@
 /* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                 */
 /**************************************************************************/
 
-#pragma once
+#ifndef SUBDIV_PLUGIN_H
+#define SUBDIV_PLUGIN_H
 
 #include "editor/editor_plugin.h"
 #include "editor/import/editor_import_plugin.h"
@@ -75,3 +76,5 @@ public:
 
 	GodotSubdivImporter();
 };
+
+#endif // SUBDIV_PLUGIN_H

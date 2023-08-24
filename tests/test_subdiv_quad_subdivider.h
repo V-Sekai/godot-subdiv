@@ -28,7 +28,8 @@
 /* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                 */
 /**************************************************************************/
 
-#pragma once
+#ifndef TEST_SUBDIV_QUAD_SUBDIVIDER_H
+#define TEST_SUBDIV_QUAD_SUBDIVIDER_H
 
 #include "tests/test_macros.h"
 
@@ -106,3 +107,4 @@ TEST_CASE("subdiv level zero") {
 	PackedInt32Array expected_index_array = create_packed_int32_array(expected_index_arr, 6);
 	CHECK_EQ(expected_index_array, result_index_array);
 }
+#endif // TEST_SUBDIV_QUAD_SUBDIVIDER_H
