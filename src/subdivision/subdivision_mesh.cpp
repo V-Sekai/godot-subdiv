@@ -133,7 +133,7 @@ void SubdivisionMesh::set_rid(RID p_rid) {
 
 void SubdivisionMesh::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_rid"), &SubdivisionMesh::get_rid);
-	ClassDB::bind_method(D_METHOD("update_subdivision"), &SubdivisionMesh::update_subdivision);
+	ClassDB::bind_method(D_METHOD("update_subdivision", "mesh", "level"), &SubdivisionMesh::update_subdivision);
 }
 
 SubdivisionMesh::SubdivisionMesh() {

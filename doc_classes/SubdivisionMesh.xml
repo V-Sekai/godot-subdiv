@@ -14,8 +14,8 @@
 		</method>
 		<method name="update_subdivision">
 			<return type="void" />
-			<param index="0" name="_unnamed_arg0" type="TopologyDataMesh" />
-			<param index="1" name="_unnamed_arg1" type="int" />
+			<param index="0" name="mesh" type="TopologyDataMesh" />
+			<param index="1" name="level" type="int" />
 			<description>
 			</description>
 		</method>
