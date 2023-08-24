@@ -252,6 +252,17 @@ void Subdivider::_create_subdivision_vertices(Far::TopologyRefiner *refiner, con
 				}
 			}
 		}
+		for (int vertex_index = 0; vertex_index < topology_data.vertex_count; vertex_index++) {
+			float total_weight = 0.0f;
+			for (int weight_index = 0; weight_index < 4; weight_index++) {
+				total_weight += topology_data.weights_array[vertex_index * 4 + weight_index];
+			}
+			for (int weight_index = 0; weight_index < 4; weight_index++) {
+				if (total_weight != 0) {
+					topology_data.weights_array.write[vertex_index * 4 + weight_index] /= total_weight;
+				}
+			}
+		}
 	}
 }
 
