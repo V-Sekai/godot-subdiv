@@ -26,8 +26,7 @@ thirdparty_sources = [
     "vtr/sparseSelector.cpp",
     "vtr/triRefinement.cpp",
 ]
-thirdparty_sources = [thirdparty_dir +
-                      file for file in thirdparty_sources]
+thirdparty_sources = [thirdparty_dir + file for file in thirdparty_sources]
 
 env_thirdparty = module_env.Clone()
 env_thirdparty.disable_warnings()
