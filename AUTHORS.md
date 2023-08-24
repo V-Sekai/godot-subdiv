@@ -6,7 +6,7 @@ GitHub usernames are indicated in parentheses.
 
 This project is originally a port from a [Godot 3 module](https://github.com/godot-extended-libraries/godot-fire/tree/feature/3.2/opensubdiv-next) by
 
-    K. S. Ernest (iFire) Lee (fire) 
+    K. S. Ernest (iFire) Lee (fire)
 
 who also contributed directly by testing, opening issues and helping with the Importer.
 \
