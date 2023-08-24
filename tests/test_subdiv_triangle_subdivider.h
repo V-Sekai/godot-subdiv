@@ -39,7 +39,7 @@
 #include "subdiv_utility_methods.h"
 
 //I don't think a lot of unit tests are needed for this. If it outputs non empty data subdivision very likely worked since opensubdiv let the data through
-TEST_CASE("subdivide once") {
+TEST_CASE("[Subdiv] subdivide once") {
 	Array arr;
 	PackedVector3Array vertex_array;
 	vertex_array.push_back(Vector3(0, 0, 0));
