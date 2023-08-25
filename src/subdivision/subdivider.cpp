@@ -41,6 +41,11 @@ using namespace OpenSubdiv;
 typedef Far::TopologyDescriptor Descriptor;
 
 Subdivider::TopologyData::TopologyData(const Array &p_mesh_arrays, int32_t p_format, int32_t p_face_verts) {
+	ERR_FAIL_INDEX(TopologyDataMesh::ARRAY_VERTEX, p_mesh_arrays.size());
+	ERR_FAIL_INDEX(TopologyDataMesh::ARRAY_INDEX, p_mesh_arrays.size());
+	ERR_FAIL_INDEX(TopologyDataMesh::ARRAY_UV_INDEX, p_mesh_arrays.size());
+	ERR_FAIL_INDEX(TopologyDataMesh::ARRAY_BONES, p_mesh_arrays.size());
+	ERR_FAIL_INDEX(TopologyDataMesh::ARRAY_WEIGHTS, p_mesh_arrays.size());
 	ERR_FAIL_INDEX(p_mesh_arrays.size(), int(TopologyDataMesh::ARRAY_MAX) + 1);
 	vertex_array = p_mesh_arrays[TopologyDataMesh::ARRAY_VERTEX];
 	index_array = p_mesh_arrays[TopologyDataMesh::ARRAY_INDEX];
