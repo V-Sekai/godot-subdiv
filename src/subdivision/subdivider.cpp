@@ -98,10 +98,10 @@ struct Bone {
 
 struct VertexWeights {
 	void Clear() {
-		for (int i = 0; i < weights.size(); i++) {
-			weights.write[i].bone_id = -1;
-			weights.write[i].weight = 0;
-		}
+		int32_t size = weights.size();
+		weights.clear();
+		weights.resize(size);
+		weights.fill(Bone {-1, 0});
 	}
 
 	void AddWithWeight(VertexWeights const &src, float weight) {
