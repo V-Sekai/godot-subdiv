@@ -51,7 +51,6 @@ String GodotSubdivImporter::get_visible_name() const {
 void GodotSubdivImporter::get_recognized_extensions(List<String> *p_extensions) const {
 	p_extensions->push_back("glb");
 	p_extensions->push_back("gltf");
-	p_extensions->push_back("vrm");
 }
 
 String GodotSubdivImporter::get_save_extension() const {
@@ -85,7 +84,7 @@ bool GodotSubdivImporter::get_option_visibility(const String &p_path, const Stri
 void GodotSubdivImporter::get_import_options(const String &p_path, List<ImportOption> *r_options, int p_preset) const {
 	ImportOption option(PropertyInfo(Variant::INT, "import_as", PROPERTY_HINT_ENUM, "BakedSubdivMesh (bake at runtime),ImporterMesh (bake at import)"), "ImporterMesh (bake at import)");
 	r_options->push_back(option);
-	ImportOption option_2(PropertyInfo(Variant::INT, "subdivision_level", PROPERTY_HINT_RANGE, "0,6"), 0);
+	ImportOption option_2(PropertyInfo(Variant::INT, "subdivision_level", PROPERTY_HINT_RANGE, "0,2"), 0);
 	r_options->push_back(option_2);
 }
 
