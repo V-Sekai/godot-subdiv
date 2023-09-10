@@ -50,8 +50,8 @@ SubdivisionServer::~SubdivisionServer() {
 }
 
 void SubdivisionServer::_bind_methods() {
-	ClassDB::bind_method(D_METHOD("create_subdivision_mesh", "mesh", "level"), &SubdivisionServer::create_subdivision_mesh);
-	ClassDB::bind_method(D_METHOD("create_subdivision_mesh_with_rid", "mesh", "level", "rid"), &SubdivisionServer::create_subdivision_mesh_with_rid);
+	ClassDB::bind_static_method("SubdivisionServer", D_METHOD("create_subdivision_mesh", "mesh", "level"), &SubdivisionServer::create_subdivision_mesh);
+	ClassDB::bind_static_method("SubdivisionServer", D_METHOD("create_subdivision_mesh_with_rid", "mesh", "level", "rid"), &SubdivisionServer::create_subdivision_mesh_with_rid);
 }
 
 Ref<SubdivisionMesh> SubdivisionServer::create_subdivision_mesh(const Ref<TopologyDataMesh> &p_mesh, int32_t p_level) {

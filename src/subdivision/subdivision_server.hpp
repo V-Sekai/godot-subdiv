@@ -47,8 +47,8 @@ protected:
 
 public:
 	static SubdivisionServer *get_singleton();
-	Ref<SubdivisionMesh> create_subdivision_mesh(const Ref<TopologyDataMesh> &p_mesh, int32_t p_level);
-	Ref<SubdivisionMesh> create_subdivision_mesh_with_rid(const Ref<TopologyDataMesh> &p_mesh, int32_t p_level, RID p_rid);
+	static Ref<SubdivisionMesh> create_subdivision_mesh(const Ref<TopologyDataMesh> &p_mesh, int32_t p_level);
+	static Ref<SubdivisionMesh> create_subdivision_mesh_with_rid(const Ref<TopologyDataMesh> &p_mesh, int32_t p_level, RID p_rid);
 	SubdivisionServer();
 	~SubdivisionServer();
 };
