@@ -35,7 +35,6 @@
 #include "servers/rendering_server.h"
 
 #include "../subdivision/subdivision_mesh.hpp"
-#include "../subdivision/subdivision_server.hpp"
 
 void TopologyDataMesh::add_surface(const Array &p_arrays, const Array &p_blend_shapes, const Ref<Material> &p_material,
 		const String &p_name, int32_t p_format, int32_t p_topology_type) {

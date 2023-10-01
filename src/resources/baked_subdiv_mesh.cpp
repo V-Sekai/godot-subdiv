@@ -36,7 +36,6 @@
 #include "../resources/topology_data_mesh.hpp"
 #include "../subdivision/subdivision_baker.hpp"
 #include "../subdivision/subdivision_mesh.hpp"
-#include "../subdivision/subdivision_server.hpp"
 
 void BakedSubdivMesh::set_data_mesh(Ref<TopologyDataMesh> p_data_mesh) {
 	data_mesh = p_data_mesh;

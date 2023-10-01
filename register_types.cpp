@@ -37,7 +37,6 @@
 #include "src/resources/topology_data_mesh.hpp"
 #include "src/subdivision/subdivision_baker.hpp"
 #include "src/subdivision/subdivision_mesh.hpp"
-#include "src/subdivision/subdivision_server.hpp"
 
 #include "src/subdivision/quad_subdivider.hpp"
 #include "src/subdivision/subdivider.hpp"
@@ -49,8 +48,6 @@
 #include "editor/import/resource_importer_scene.h"
 #include "editor/subdiv_plugin.h"
 #endif
-
-static SubdivisionServer *_subdivision_server;
 
 #ifdef TESTS_ENABLED
 #include "subdiv_test.hpp"
@@ -75,7 +72,6 @@ void initialize_subdiv_module(ModuleInitializationLevel p_level) {
 	ClassDB::register_class<QuadSubdivider>();
 	ClassDB::register_class<TriangleSubdivider>();
 
-	ClassDB::register_class<SubdivisionServer>();
 	ClassDB::register_class<SubdivisionMesh>();
 	ClassDB::register_class<SubdivisionBaker>();
 
@@ -83,17 +79,10 @@ void initialize_subdiv_module(ModuleInitializationLevel p_level) {
 
 	ClassDB::register_class<TopologyDataMesh>();
 	ClassDB::register_class<BakedSubdivMesh>();
-
-	_subdivision_server = memnew(SubdivisionServer);
-	Engine::get_singleton()->add_singleton(Engine::Singleton("SubdivisionServer", _subdivision_server));
 }
 
 void uninitialize_subdiv_module(ModuleInitializationLevel p_level) {
 	if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
 		return;
-	}
-	if (Engine::get_singleton()->has_singleton("SubdivisionServer") && Engine::get_singleton()->get_singleton_object("SubdivisionServer") == _subdivision_server) {
-		Engine::get_singleton()->remove_singleton("SubdivisionServer");
-		memdelete(_subdivision_server);
 	}
 }

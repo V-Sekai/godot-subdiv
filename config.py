@@ -11,7 +11,6 @@ def get_doc_classes():
         "TriangleSubdivider",
         "TopologyDataMesh",
         "TopologyDataImporter",
-        "SubdivisionServer",
         "SubdivisionMesh",
         "SubdivisionBaker",
         "Subdivider",
