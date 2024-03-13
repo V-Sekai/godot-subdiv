@@ -24,9 +24,7 @@
 
 #include "../osd/ompEvaluator.h"
 #include "../osd/ompKernel.h"
-#include "../osd/patchBasisCommonTypes.h"
-#include "../osd/patchBasisCommon.h"
-#include "../osd/patchBasisCommonEval.h"
+#include "../osd/patchBasis.h"
 #include <omp.h>
 
 namespace OpenSubdiv {
@@ -361,6 +359,8 @@ OmpEvaluator::Synchronize(void * /*deviceContext*/) {
 /* static */
 void
 OmpEvaluator::SetNumThreads(int numThreads) {
+    // This is deprecated functionality. We preserve the existing behavior
+    // for consistency.
     omp_set_num_threads(numThreads);
 }
 

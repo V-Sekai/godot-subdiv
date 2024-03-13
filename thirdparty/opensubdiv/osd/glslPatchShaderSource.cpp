@@ -41,13 +41,10 @@ static const char *patchLegacyShaderSource =
 #include "glslPatchLegacy.gen.h"
 ;
 static const char *patchBasisTypesShaderSource =
-#include "patchBasisCommonTypes.gen.h"
+#include "patchBasisTypes.gen.h"
 ;
 static const char *patchBasisShaderSource =
-#include "patchBasisCommon.gen.h"
-;
-static const char *patchBasisEvalShaderSource =
-#include "patchBasisCommonEval.gen.h"
+#include "patchBasis.gen.h"
 ;
 static const char *boxSplineTriangleShaderSource =
 #include "glslPatchBoxSplineTriangle.gen.h"
@@ -67,10 +64,18 @@ static const char *gregoryTriangleShaderSource =
 
 /*static*/
 std::string
-GLSLPatchShaderSource::GetCommonShaderSource() {
+GLSLPatchShaderSource::GetPatchDrawingShaderSource() {
     std::stringstream ss;
     ss << std::string(commonShaderSource);
     ss << std::string(commonTessShaderSource);
+    return ss.str();
+}
+
+/*static*/
+std::string
+GLSLPatchShaderSource::GetCommonShaderSource() {
+    std::stringstream ss;
+    ss << GetPatchDrawingShaderSource();
     ss << std::string(patchLegacyShaderSource);
     return ss.str();
 }
@@ -84,7 +89,6 @@ GLSLPatchShaderSource::GetPatchBasisShaderSource() {
 #endif
     ss << std::string(patchBasisTypesShaderSource);
     ss << std::string(patchBasisShaderSource);
-    ss << std::string(patchBasisEvalShaderSource);
     return ss.str();
 }
 

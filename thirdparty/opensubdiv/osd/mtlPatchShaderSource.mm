@@ -44,13 +44,10 @@ static std::string patchLegacyShaderSource(
 #include "mtlPatchLegacy.gen.h"
 );
 static std::string patchBasisTypesShaderSource(
-#include "patchBasisCommonTypes.gen.h"
+#include "patchBasisTypes.gen.h"
 );
 static std::string patchBasisShaderSource(
-#include "patchBasisCommon.gen.h"
-);
-static std::string patchBasisEvalShaderSource(
-#include "patchBasisCommonEval.gen.h"
+#include "patchBasis.gen.h"
 );
 static std::string bsplineShaderSource(
 #include "mtlPatchBSpline.gen.h"
@@ -147,18 +144,23 @@ GetPatchTypeSource(Far::PatchDescriptor::Type type) {
 
 /*static*/
 std::string
-MTLPatchShaderSource::GetCommonShaderSource() {
+MTLPatchShaderSource::GetPatchDrawingShaderSource() {
 #if TARGET_OS_IOS || TARGET_OS_TV
     return std::string("#define OSD_METAL_IOS 1\n")
                .append(commonShaderSource)
-               .append(commonTessShaderSource)
-               .append(patchLegacyShaderSource);
+               .append(commonTessShaderSource);
 #elif TARGET_OS_OSX
     return std::string("#define OSD_METAL_OSX 1\n")
                .append(commonShaderSource)
-               .append(commonTessShaderSource)
-               .append(patchLegacyShaderSource);
+               .append(commonTessShaderSource);
 #endif
+}
+
+/*static*/
+std::string
+MTLPatchShaderSource::GetCommonShaderSource() {
+    return GetPatchDrawingShaderSource()
+               .append(patchLegacyShaderSource);
 }
 
 /*static*/
@@ -171,7 +173,6 @@ MTLPatchShaderSource::GetPatchBasisShaderSource() {
 #endif
     ss << patchBasisTypesShaderSource;
     ss << patchBasisShaderSource;
-    ss << patchBasisEvalShaderSource;
     return ss.str();
 }
 

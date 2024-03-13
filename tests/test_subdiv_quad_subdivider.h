@@ -31,15 +31,14 @@
 #ifndef TEST_SUBDIV_QUAD_SUBDIVIDER_H
 #define TEST_SUBDIV_QUAD_SUBDIVIDER_H
 
+#include "core/io/resource_loader.h"
 #include "scene/resources/material.h"
 #include "tests/test_macros.h"
 
-#include "core/io/resource_loader.h"
-
 #include "../src/resources/topology_data_mesh.hpp"
 #include "../src/subdivision/quad_subdivider.hpp"
-
 #include "subdiv_utility_methods.h"
+#include <cmath>
 
 Array create_subdivided_mesh() {
 	Vector<Vector3> vertices = {
