@@ -37,7 +37,7 @@
 #include "scene/3d/mesh_instance_3d.h"
 #include "scene/3d/skeleton_3d.h"
 #include "scene/main/scene_tree.h"
-#include "scene/resources/importer_mesh.h"
+#include "scene/resources/3d/importer_mesh.h"
 #include "scene/resources/mesh.h"
 
 #include "../resources/baked_subdiv_mesh.hpp"

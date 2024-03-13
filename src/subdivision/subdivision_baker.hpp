@@ -32,7 +32,7 @@
 #define SUBDIVISION_BAKER_H
 
 #include "core/object/ref_counted.h"
-#include "scene/resources/importer_mesh.h"
+#include "scene/resources/3d/importer_mesh.h"
 
 #include "../resources/topology_data_mesh.hpp"
 
