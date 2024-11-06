@@ -140,7 +140,7 @@ void TopologyDataImporter::convert_importer_meshinstance_to_subdiv(ImporterMeshI
 			Ref<SubdivisionBaker> baker;
 			baker.instantiate();
 			subdiv_importer_mesh = baker->get_importer_mesh(subdiv_importer_mesh, topology_data_mesh, subdiv_level, true);
-			subdiv_importer_mesh->generate_lods(Math::deg_to_rad(60.0f), Math::deg_to_rad(25.0f), Array());
+			subdiv_importer_mesh->generate_lods(Math::deg_to_rad(60.0f), Array());
 			importer_mesh_instance->set_mesh(subdiv_importer_mesh);
 			MeshInstance3D *mesh_instance = Object::cast_to<MeshInstance3D>(_replace_importer_mesh_instance_with_mesh_instance(importer_mesh_instance));
 			importer_mesh_instance->replace_by(mesh_instance, false);

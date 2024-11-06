@@ -69,7 +69,7 @@ private:
 		PackedInt32Array bones_array; //could be float or int array after docs
 		Vector<float> weights_array;
 		SurfaceVertexArrays(const Array &p_mesh_arrays);
-		SurfaceVertexArrays(){};
+		SurfaceVertexArrays() {};
 	};
 
 	TopologyDataImporter::TopologySurfaceData _remove_duplicate_vertices(const SurfaceVertexArrays &surface, int32_t format);
